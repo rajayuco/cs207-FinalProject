@@ -3,7 +3,7 @@
 
 
 ###TRY: RECALL FOR EVERY KEY COMBINATION IN AUTODIFF? AS IN, RECORD THE UNIQUE COMBOS AND PASS ON?
-
+import numpy as np
 
 
 class autodiff():
@@ -107,7 +107,7 @@ class autodiff():
 	#FUNCTION: __sub__
 	#PURPOSE: Subtract an autodiff instance or number from a autodiff instance, and calculate the derivatives resulting from this action.
 	def __rsub__(self, other):
-		return self + (-1*other)
+		return (-1*self) + other
 	
 	
 	

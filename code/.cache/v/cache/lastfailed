@@ -1,0 +1,5 @@
+{
+  "test_autodiff_jnp.py::test_autodiff_pow1": true,
+  "test_autodiff_jnp.py::test_autodiff_pow2": true,
+  "test_autodiff_jnp.py::test_autodiff_pow3": true
+}
