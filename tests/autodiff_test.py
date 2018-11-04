@@ -27,6 +27,27 @@ def test_trig_types():
     with pytest.raises(TypeError):
         ad.tan("green")
 
+## test division and exponential
+def test_truediv_ad_result():
+    f1 = x/y
+    assert f1.val == 5
+    assert f1.der['x'] == 1/2
+    assert f1.der['y'] == 10/4
+
+def test_truediv_const_result():
+    f2 = x/3
+    assert f2.val == 10/3
+    assert f2.der['x'] == 1/3
+
+def test_rdiv_ad_result():
+    f1 = y/x
+    assert f1.val == 2/10
+    assert f1.der['x'] == 2/10**2
+    assert f1.der['y'] == 1/10
+    
+def test_exp_result():
+    assert x.exp().val == np.exp(10)
+	
 
 ## test multiplication
 def test_mul_ad_result():

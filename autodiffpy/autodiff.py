@@ -41,7 +41,70 @@ class autodiff():
         return anew
 
     __rmul__ = __mul__
+	
+	def __truediv__(self,other):
+        '''
+        funtion for left division
+        
+        '''   
+        anew = autodiff(self.name, self.val, self.der)
+        try:
+            anew.val = self.val/other.val
+            for key in np.unique([key for key in self.der] + [key for key in other.der]):
+                if key not in self.der:
+                    anew.der[key]=self.val*other.der[key]/other.val**2
+                elif key not in other.der:
+                    anew.der[key]=self.der[key]/other.val
+                else:
+                    anew.der[key]=self.der[key]/other.der[key]       
+        except AttributeError:
+            try:
+                for key in self.der:
+                    anew.der[key] = self.der[key]/other
+                    anew.val = self.val/other
+            except:
+                raise TypeError('please input a number or autodiff class')
+        return anew
+  
+    def __rdiv__(self, other):
+        '''
+        function for right division
+        '''   
+        anew = autodiff(self.name, self.val, self.der)
+        try:
+            anew.val = self.val/other.val
+            for key in np.unique([key for key in self.der] + [key for key in other.der]):
+                if key not in self.der:
+                    anew.der[key]=other.der[key]/self.val
+                elif key not in other.der:
+                    anew.der[key]=self.der[key]*other.val[key]/self.val**2
+                else:
+                    anew.der[key]=self.der[key]/other.der[key]       
+        except AttributeError:
+            try:
+                for key in self.der:
+                    anew.der[key] = self.der[key]/other
+                    anew.val = self.val/2
+            except:
+                raise TypeError('please input a number or autodiff class')
+        return anew
+    
+    
+    def exp(self):
+        '''
+        function for derivative with exponential calculation
+        '''
+        anew = autodiff(self.name, self.val, self.der)
+        try:
+            anew.val = np.exp(self.val)
+            for key in self.der:
+                anew.der[key]=self.der[key]*anew.val
 
+        except AttributeError:
+            raise TypeError('please input a number or autodiff class')
+            
+        return anew
+	
 
 
 
