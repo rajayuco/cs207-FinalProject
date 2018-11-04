@@ -104,18 +104,18 @@ def test_pow_result_adandconst():
     ad1 = adiff(name="x", val=2.5, der=1)
     ad2 = adiff(name="y", val=3, der=1)
     
-    ad3 = (ad1**ad2)**ad1
+    ad3 = ad1**(ad2**ad1)
     ad4 = (ad1**1.5)**ad2
     ad5 = (1.5**ad1)**ad2
     
-    assert ad3.val == 64
+    assert ad3.val == 512
     assert abs(ad3.der["x"] - 5812.9920480098718094) < 1E-16
     assert abs(ad3.der["y"] - 2129.3481386801519905) < 1E-16
     
-    assert abs(ad4.val  - 10.374716437208077327) < 1E-16
-    assert abs(ad4.der["x"] - 17.507333987788630490) < 1E-16
-    assert abs(ad4.der["y"] - 9.8407672680019981255) < 1E-16
+    assert abs(ad4.val  - 22.627416997969520780) < 1E-16
+    assert abs(ad4.der["x"] - 50.911688245431421756) < 1E-16
+    assert abs(ad4.der["y"] - 23.526195443245132601) < 1E-16
 	
-    assert abs(ad5.val - 25.62890625) < 1E-16
-    assert abs(ad5.der["x"] - 124.69952692020311766) < 1E-16
-    assert abs(ad5.der["y"] - 57.623417001265194147) < 1E-16
+    assert abs(ad5.val - 11.390625) < 1E-10
+    assert abs(ad5.der["x"] - 13.855499296875) < 1E-10
+    assert abs(ad5.der["y"] - 9.2370019940891198269) < 1E-10
