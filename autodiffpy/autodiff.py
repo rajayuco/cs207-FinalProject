@@ -210,9 +210,13 @@ def log(ad):
         '''
 
         try:
+            if ad.val<=0:
+                raise ValueError
             anew = autodiff(name = ad.name, val = np.log(ad.val), der = ad.der)
             for key in ad.der:
                 anew.der[key] = ad.der[key]/ad.val
             return anew
         except TypeError:
             print("Error: input should be autodiff instance")
+        except ValueError:
+            print('Error: cannot evaluate the log of a nonpositive number')
