@@ -89,134 +89,143 @@ class autodiff():
                 raise TypeError('please input a number or autodiff class')
         return anew
     
-    
-    def exp(self):
-        '''
-        function for derivative with exponential calculation
-        '''
-        anew = autodiff(self.name, self.val, self.der)
-        try:
-            anew.val = np.exp(self.val)
-            for key in self.der:
-                anew.der[key]=self.der[key]*anew.val
-
-        except AttributeError:
-            raise TypeError('please input a number or autodiff class')
-            
-        return anew
+  
+	def __add__(self, other):
+		#Generate a new autodiff instance copy of self
+		anew = autodiff(self.name, self.val, self.der)
+		
+		#Tries adding two autodiff instances together
+		try:
+			#Add values
+			anew.val = self.val + other.val
+			
+			#Calculate derivatives of this addition for all variables so far encountered
+			for key in np.unique([key for key in self.der] + [key for key in other.der]): #Iterate through all unique variables so far encountered
+				#If self has not encountered this variable before (so derivative of self with respect to variable must be 0)
+				if key not in self.der:
+					anew.der[key] = other.der[key]
+				
+				#Else, if opponent has not encountered this variable before (so derivative of self with respect to variable must be 0)
+				elif key not in other.der:
+					anew.der[key] = self.der[key]
+				
+				#Else, if both self and opponent have encountered this variable before
+				else:
+					anew.der[key] = self.der[key] + other.der[key]
+		
+		#Otherwise, if not two autodiff instances:
+		except AttributeError:
+			#Tries adding autodiff instance and number together
+			try:
+				for key in self.der:
+					anew.der[key] = self.der[key]
+					anew.val = other + self.val
+			
+			#Otherwise, raises a type error if not compatible
+			except:
+				raise TypeError('please input a number or autodiff class')
+		
+		#Returns new autodiff instance
+		return anew
 	
-
-
-
-def sin(ad):
-    """Returns autodiff instance of sin(x)
-
-    INPUTS
-    =======
-    ad: autodiff instance
-
-    RETURNS
-    ========
-    anew: autodiff instance
-       returns a new autodiff instance with updated value and derivative(s)
-
-    EXAMPLES
-    =========
-    >>> x = autodiff('x', 10)
-    >>> f1 = sin(x)
-    >>> print(f1.val, fl.der)
-    -0.5440211108893699 {'x': -0.8390715290764524}
-    """
-    try:
-        anew = autodiff(name=ad.name, val = np.sin(ad.val), der = ad.der)
-        for key in ad.der:
-            anew.der[key] = np.cos(ad.val)*ad.der[key]
-        return anew
-    except TypeError:
-        print("Error: input should be autodiff instance only.")
-
-def cos(ad):
-    """Returns autodiff instance of cos(x)
-
-    INPUTS
-    =======
-    ad: autodiff instance
-
-    RETURNS
-    ========
-    anew: autodiff instance
-       returns a new autodiff instance with updated value and derivative(s)
-
-    EXAMPLES
-    =========
-    >>> x = autodiff('x', 10)
-    >>> f1 = cos(x)
-    >>> print(f1.val, fl.der)
-    -0.8390715290764524 {'x': 0.5440211108893699}
-    """
-    try:
-        anew = autodiff(name=ad.name, val = np.cos(ad.val), der = ad.der)
-        for key in ad.der:
-            anew.der[key] = -np.sin(ad.val)*ad.der[key]
-        return anew
-    except TypeError:
-        print("Error: input should be autodiff instance only.")
-
-def tan(ad):
-    """Returns autodiff instance of tan(x)
-
-    INPUTS
-    =======
-    ad: autodiff instance
-
-    RETURNS
-    ========
-    anew: autodiff instance
-       returns a new autodiff instance with updated value and derivative(s)
-
-    EXAMPLES
-    =========
-    >>> x = autodiff('x', 10)
-    >>> f1 = tan(x)
-    >>> print(f1.val, fl.der)
-    0.6483608274590867 {'x': 1.4203717625834316}
-    """
-    try:
-        anew = autodiff(name=ad.name, val = np.tan(ad.val), der = ad.der)
-        for key in ad.der:
-            anew.der[key] = 1/(np.cos(ad.val))**2*ad.der[key]
-        return anew
-    except TypeError:
-        print("Error: input should be autodiff instance only.")
-
-def log(ad):
-        
-        '''Returns autodiff instance of log(x)
-
-        INPUTS
-        ==========
-        ad: autodiff instance
-
-        RETURNS
-        ==========
-        anew: autodiff instance with updated values and derivatives
-
-        EXAMPLES
-        ==========
-        >>> x = autodiff('x', np.exp(2))
-        >>> f1 = log(x)
-        >>> f1.val = 2.0
-        >>> f1.der = 0.1353352832366127
-        '''
-
-        try:
-            if ad.val<=0:
-                raise ValueError
-            anew = autodiff(name = ad.name, val = np.log(ad.val), der = ad.der)
-            for key in ad.der:
-                anew.der[key] = ad.der[key]/ad.val
-            return anew
-        except TypeError:
-            print("Error: input should be autodiff instance")
-        except ValueError:
-            print('Error: cannot evaluate the log of a nonpositive number')
+	
+	
+	#FUNCTION: __radd__
+	#PURPOSE: Allows commutative addition.
+	def __radd__(self, other):
+		return self + other
+	
+	
+	
+	#FUNCTION: __sub__
+	#PURPOSE: Subtract an autodiff instance or number from a autodiff instance, and calculate the derivatives resulting from this action.
+	def __sub__(self, other):
+		#Generate a new autodiff instance copy of self
+		anew = autodiff(self.name, self.val, self.der)
+		
+		#Tries subtracting two autodiff instances together
+		try:
+			#Subtract values
+			anew.val = self.val - other.val
+			
+			#Calculate derivatives of this subtraction for all variables so far encountered
+			for key in np.unique([key for key in self.der] + [key for key in other.der]): #Iterate through all unique variables so far encountered
+				#If self has not encountered this variable before (so derivative of self with respect to variable must be 0)
+				if key not in self.der:
+					anew.der[key] = -1*other.der[key]
+				
+				#Else, if opponent has not encountered this variable before (so derivative of self with respect to variable must be 0)
+				elif key not in other.der:
+					anew.der[key] = self.der[key]
+				
+				#Else, if both self and opponent have encountered this variable before
+				else:
+					anew.der[key] = self.der[key] - other.der[key]
+		
+		#Otherwise, if not two autodiff instances:
+		except AttributeError:
+			#Tries subtracting number from autodiff instance
+			try:
+				for key in self.der:
+					anew.der[key] = self.der[key]
+					anew.val = self.val - other
+			
+			#Otherwise, raises a type error if not compatible
+			except:
+				raise TypeError('please input a number or autodiff class')
+		
+		#Returns new autodiff instance
+		return anew
+	
+	
+	
+	#FUNCTION: __sub__
+	#PURPOSE: Subtract an autodiff instance or number from a autodiff instance, and calculate the derivatives resulting from this action.
+	def __rsub__(self, other):
+		return (-1*self) + other
+	
+	
+	
+	#FUNCTION: __pow__
+	#PURPOSE: Raise this autodiff instance to a number or to another autodiff instance, and calculate the derivatives resulting from this action.
+	def __pow__(self, other):
+		#Generate a new autodiff instance copy of self
+		anew = autodiff(self.name, self.val, self.der)
+		
+		#Tries raising this autodiff instance to another autodiff instance
+		try:
+			#Raise values
+			anew.val = self.val**other.val
+			
+			#Calculate derivatives of this exponentiation for all variables so far encountered
+			for key in np.unique([key for key in self.der] + [key for key in other.der]): #Iterate through all unique variables so far encountered
+				#If self has not encountered this variable before (so derivative of self with respect to variable must be 0)
+				if key not in self.der:
+					anew.der[key] = anew.val*(np.log(self.val)*other.der[key])
+				
+				#Else, if opponent has not encountered this variable before (so derivative of self with respect to variable must be 0)
+				elif key not in other.der:
+					anew.der[key] = anew.val*(other.val*self.der[key]/1.0/self.val)
+				
+				#Else, if both self and opponent have encountered this variable before
+				else:
+					anew.der[key] = anew.val*((np.log(self.val)*other.der[key]) + (other.val*self.der[key]/1.0/self.val))
+		
+		#Otherwise, if not two autodiff instances:
+		except AttributeError:
+			#Tries adding autodiff instance and number together
+			try:
+				for key in self.der:
+					anew.der[key] = other*(self.val**(other - 1))*self.der[key]
+					anew.val = self.val**other
+			
+			#Otherwise, raises a type error if not compatible
+			except:
+				raise TypeError('please input a number or autodiff class')
+		
+		#Returns new autodiff instance
+		return anew
+	
+	
+	def __rpow__(self, other):
+		return self**other
