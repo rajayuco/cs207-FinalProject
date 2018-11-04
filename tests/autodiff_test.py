@@ -70,3 +70,15 @@ def test_mul_types():
 def test_neg_result():
     assert -x.val == -10
     assert -x.der['x'] == -1
+
+#test logarithm function
+def test_logarithm():
+    x = ad.autodiff('x',5,2)
+    f = log(x)
+    assert f.val == 1.6094379124341003 and f.der == {'x': 0.4}
+
+def test_log_nonpositive():
+    x = ad.autodiff('x',-1)
+    with pytest.raises(ValueError):
+        np.log(-1)
+
