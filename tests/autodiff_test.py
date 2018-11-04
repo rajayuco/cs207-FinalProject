@@ -1,5 +1,5 @@
 import pytest
-import autodiff as ad
+import autodiffpy as ad
 
 ## example cases
 x = ad.autodiff('x', 10)
