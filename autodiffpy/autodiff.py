@@ -41,8 +41,8 @@ class autodiff():
         return anew
 
     __rmul__ = __mul__
-	
-	def __truediv__(self,other):
+
+    def __truediv__(self,other):
         '''
         funtion for left division
         
@@ -188,3 +188,35 @@ def tan(ad):
         return anew
     except TypeError:
         print("Error: input should be autodiff instance only.")
+
+def log(ad):
+        
+        '''Returns autodiff instance of log(x)
+
+        INPUTS
+        ==========
+        ad: autodiff instance
+
+        RETURNS
+        ==========
+        anew: autodiff instance with updated values and derivatives
+
+        EXAMPLES
+        ==========
+        >>> x = autodiff('x', np.exp(2))
+        >>> f1 = log(x)
+        >>> f1.val = 2.0
+        >>> f1.der = 0.1353352832366127
+        '''
+
+        try:
+            if ad.val<=0:
+                raise ValueError
+            anew = autodiff(name = ad.name, val = np.log(ad.val), der = ad.der)
+            for key in ad.der:
+                anew.der[key] = ad.der[key]/ad.val
+            return anew
+        except TypeError:
+            print("Error: input should be autodiff instance")
+        except ValueError:
+            print('Error: cannot evaluate the log of a nonpositive number')
