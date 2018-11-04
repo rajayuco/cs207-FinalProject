@@ -34,7 +34,7 @@ def test_trig_type():
 def test_exp_result_single():
     x = ad.autodiff('x', 10)
     assert admath.exp(x).val == np.exp(10)
-=======
+
 ## test division and exponential
 def test_exp_result():
     assert admath.exp(x).val == np.exp(10)
