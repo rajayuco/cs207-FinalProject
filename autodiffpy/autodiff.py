@@ -41,8 +41,8 @@ class autodiff():
         return anew
 
     __rmul__ = __mul__
-	
-	def __truediv__(self,other):
+
+    def __truediv__(self,other):
         '''
         funtion for left division
         
@@ -205,12 +205,12 @@ def log(ad):
         ==========
         >>> x = autodiff('x', np.exp(2))
         >>> f1 = log(x)
-        >>> f1.val = 2
-        >>> f1.der = np.exp(-2)
+        >>> f1.val = 2.0
+        >>> f1.der = 0.1353352832366127
         '''
 
         try:
-            anew = autodiff(name = ad.name, val = np.log(ad.name), der = ad.der)
+            anew = autodiff(name = ad.name, val = np.log(ad.val), der = ad.der)
             for key in ad.der:
                 anew.der[key] = ad.der[key]/ad.val
             return anew
