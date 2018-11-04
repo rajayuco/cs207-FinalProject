@@ -89,10 +89,6 @@ class autodiff():
                 raise TypeError('please input a number or autodiff class')
         return anew
     
-	
-	def __rpow__(self, other):
-		return self**other
-    
   
 	def __add__(self, other):
 		#Generate a new autodiff instance copy of self
@@ -231,3 +227,5 @@ class autodiff():
 		return anew
 	
 	
+	def __rpow__(self, other):
+		return self**other
