@@ -51,7 +51,7 @@ def cos(ad):
     >>> x = autodiff.autodiff('x', 10)
     >>> f1 = admath.cos(x)
     >>> print(f1.val, f1.der)
-    -0.8390715290764524 {'x': 0.5440211108893699}
+    -0.8390715290764524 {'x': 0.5440211108893698}
     """
     try:
         anew = autodiff.autodiff(name=ad.name, val = np.cos(ad.val), der = ad.der)
