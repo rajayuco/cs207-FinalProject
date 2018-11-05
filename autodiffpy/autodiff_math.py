@@ -6,9 +6,9 @@ from autodiffpy.autodiff import autodiff
 
 def exp(ad):
     try:
-        anew = autodiff(name=ad.name, val = np.exp(self.val), der = ad.der)
+        anew = autodiff(name=ad.name, val = np.exp(ad.val), der = ad.der)
         for key in ad.der:
-            anew.der[key] = self.der[key]*anew.val
+            anew.der[key] = ad.der[key]*anew.val
 			
         return anew
     except TypeError:
