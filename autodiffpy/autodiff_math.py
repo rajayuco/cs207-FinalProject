@@ -1,25 +1,10 @@
 # import packages
 import numpy as np
+import sys
+sys.path.append("..")
+import autodiffpy.autodiff as autodiff
 
 def exp(ad):
-    """Returns autodiff instance of sin(x)
-
-    INPUTS
-    =======
-    ad: autodiff instance
-
-    RETURNS
-    ========
-    anew: autodiff instance
-       returns a new autodiff instance with updated value and derivative(s)
-
-    EXAMPLES
-    =========
-    >>> x = autodiff('x', 10)
-    >>> f1 = sin(x)
-    >>> print(f1.val, fl.der)
-    -0.5440211108893699 {'x': -0.8390715290764524}
-    """
     try:
         anew = autodiff(name=ad.name, val = np.exp(self.val), der = ad.der)
         for key in ad.der:
