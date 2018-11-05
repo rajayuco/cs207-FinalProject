@@ -17,8 +17,10 @@ def sin(ad):
 
     EXAMPLES
     =========
+    >>> from autodiffpy import autodiff
+    >>> from autodiffpy import autodiff_math as admath
     >>> x = autodiff.autodiff('x', 10)
-    >>> f1 = sin(x)
+    >>> f1 = admath.sin(x)
     >>> print(f1.val, fl.der)
     -0.5440211108893699 {'x': -0.8390715290764524}
     """
@@ -44,8 +46,10 @@ def cos(ad):
 
     EXAMPLES
     =========
+    >>> from autodiffpy import autodiff
+    >>> from autodiffpy import autodiff_math as admath
     >>> x = autodiff.autodiff('x', 10)
-    >>> f1 = cos(x)
+    >>> f1 = admath.cos(x)
     >>> print(f1.val, fl.der)
     -0.8390715290764524 {'x': 0.5440211108893699}
     """
@@ -71,8 +75,10 @@ def tan(ad):
 
     EXAMPLES
     =========
+    >>> from autodiffpy import autodiff
+    >>> from autodiffpy import autodiff_math as admath
     >>> x = autodiff.autodiff('x', 10)
-    >>> f1 = tan(x)
+    >>> f1 = admath.tan(x)
     >>> print(f1.val, fl.der)
     0.6483608274590867 {'x': 1.4203717625834316}
     """
@@ -98,8 +104,10 @@ def log(ad):
 
     EXAMPLES
     ==========
+    >>> from autodiffpy import autodiff
+    >>> from autodiffpy import autodiff_math as admath
     >>> x = autodiff.autodiff('x', np.exp(2))
-    >>> f1 = log(x)
+    >>> f1 = admath.log(x)
     >>> f1.val = 2.0
     >>> f1.der = 0.1353352832366127
     '''
