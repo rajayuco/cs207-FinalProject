@@ -1,6 +1,7 @@
 import pytest
-from .. import autodiffpy.autodiff as ad
-from .. import autodiffpy.autodiff_math as admath
+from autodiffpy import autodiff as ad
+from autodiffpy import autodiff_math as admath
+import numpy as np
 
 ## Test sine function
 def test_sin_result_single():
