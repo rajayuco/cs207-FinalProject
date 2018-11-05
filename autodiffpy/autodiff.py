@@ -205,8 +205,8 @@ class autodiff():
     
     def jacobian(self):
         jacobian = [[],[]]
-            for key in self.der:
-                jacobian[0].append(key)
-                jacobian[1].append(self.der[key])
+        for key in self.der:
+            jacobian[0].append(key)
+            jacobian[1].append(self.der[key])
         
         return jacobian
