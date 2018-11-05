@@ -21,7 +21,7 @@ def sin(ad):
     >>> from autodiffpy import autodiff_math as admath
     >>> x = autodiff.autodiff('x', 10)
     >>> f1 = admath.sin(x)
-    >>> print(f1.val, fl.der)
+    >>> print(f1.val, f1.der)
     -0.5440211108893699 {'x': -0.8390715290764524}
     """
     try:
@@ -50,7 +50,7 @@ def cos(ad):
     >>> from autodiffpy import autodiff_math as admath
     >>> x = autodiff.autodiff('x', 10)
     >>> f1 = admath.cos(x)
-    >>> print(f1.val, fl.der)
+    >>> print(f1.val, f1.der)
     -0.8390715290764524 {'x': 0.5440211108893699}
     """
     try:
@@ -79,7 +79,7 @@ def tan(ad):
     >>> from autodiffpy import autodiff_math as admath
     >>> x = autodiff.autodiff('x', 10)
     >>> f1 = admath.tan(x)
-    >>> print(f1.val, fl.der)
+    >>> print(f1.val, f1.der)
     0.6483608274590867 {'x': 1.4203717625834316}
     """
     try:
