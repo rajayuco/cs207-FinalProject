@@ -1,7 +1,7 @@
 import pytest
 from autodiffpy import autodiff as ad
 from autodiffpy import autodiff_math as admath
-import numpy as np
+
 
 ## Test true division with an autodiff instsance
 def test_truediv_result_ad():
@@ -49,15 +49,14 @@ def test_mul_result_const():
 def test_mul_err_types():
     x = ad.autodiff('x', 10)
     s = "str"
-    with pytest.raises(TypeError):
+    with pytest.raises(ValueError):
         x*s
 
 ## Test unary function (negative)
 def test_neg_result_single():
     x = ad.autodiff('x', 10)
-    f1 = -x
-    assert f1.val == -10
-    assert f1.der['x'] == -1
+    assert -x.val == -10
+    assert -x.der['x'] == -1
 
 ## Test addition with a constant and an autodiff instance
 def test_add_result_adandconst():
@@ -82,8 +81,8 @@ def test_add_result_adandconst():
 
 ## Test subtraction with a constant and an autodiff instance
 def test_sub_result_adandconst():
-    ad1 = adiff(name="x", val=2.5, der=1)
-    ad2 = adiff(name="y", val=3, der=1)
+    ad1 = ad.autodiff(name="x", val=2.5, der=1)
+    ad2 = ad.autodiff(name="y", val=3, der=1)
 
     ad3 = ad1 - ad2 - ad1
     ad4 = ad1 - 5.5 - ad2
@@ -103,8 +102,8 @@ def test_sub_result_adandconst():
 
 ## Test power with a constant and an autodiff instance
 def test_pow_result_adandconst():
-    ad1 = adiff(name="x", val=2.5, der=1)
-    ad2 = adiff(name="y", val=3, der=1)
+    ad1 = ad.autodiff(name="x", val=2.5, der=1)
+    ad2 = ad.autodiff(name="y", val=3, der=1)
 
     ad3 = (ad1**ad2)**ad1
     ad4 = (ad1**1.5)**ad2
