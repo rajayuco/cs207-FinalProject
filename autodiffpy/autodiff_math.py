@@ -2,7 +2,7 @@
 import numpy as np
 import sys
 sys.path.append("..")
-import autodiffpy.autodiff as autodiff
+import autodiffpy.autodiff.autodiff as autodiff
 
 def exp(ad):
     try:
