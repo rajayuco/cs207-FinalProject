@@ -1,6 +1,8 @@
 import pytest
-from .. import autodiffpy.autodiff as ad
-from .. import autodiffpy.autodiff_math as admath
+import sys
+sys.path.append("..")
+import autodiffpy.autodiff as ad
+import autodiffpy.autodiff_math as admath
 
 ## Test true division with an autodiff instsance
 def test_truediv_result_ad():
