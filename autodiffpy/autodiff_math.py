@@ -1,19 +1,6 @@
 # import packages
 import numpy as np
-import sys
-sys.path.append("..")
-from autodiffpy.autodiff import autodiff
-
-def exp(ad):
-    try:
-        anew = autodiff(name=ad.name, val = np.exp(ad.val), der = ad.der)
-        for key in ad.der:
-            anew.der[key] = ad.der[key]*anew.val
-			
-        return anew
-    except TypeError:
-        print("Error: input should be autodiff instance only.")
-		
+from autodiffpy import autodiff
 
 
 def sin(ad):
@@ -30,15 +17,18 @@ def sin(ad):
 
     EXAMPLES
     =========
-    >>> x = autodiff('x', 10)
-    >>> f1 = sin(x)
-    >>> print(f1.val, fl.der)
-    -0.5440211108893699 {'x': -0.8390715290764524}
+    >>> from autodiffpy import autodiff
+    >>> from autodiffpy import autodiff_math as admath
+    >>> x = autodiff.autodiff('x', 10)
+    >>> f1 = admath.sin(x)
+    >>> print(f1.val, f1.der)
+    -0.5440211108893698 {'x': -0.8390715290764524}
     """
     try:
-        anew = autodiff(name=ad.name, val = np.sin(ad.val), der = ad.der)
+        anew = autodiff.autodiff(name=ad.name, val = np.sin(ad.val), der = ad.der)
         for key in ad.der:
             anew.der[key] = np.cos(ad.val)*ad.der[key]
+
         return anew
     except TypeError:
         print("Error: input should be autodiff instance only.")
@@ -57,13 +47,15 @@ def cos(ad):
 
     EXAMPLES
     =========
-    >>> x = autodiff('x', 10)
-    >>> f1 = cos(x)
-    >>> print(f1.val, fl.der)
-    -0.8390715290764524 {'x': 0.5440211108893699}
+    >>> from autodiffpy import autodiff
+    >>> from autodiffpy import autodiff_math as admath
+    >>> x = autodiff.autodiff('x', 10)
+    >>> f1 = admath.cos(x)
+    >>> print(f1.val, f1.der)
+    -0.8390715290764524 {'x': 0.5440211108893698}
     """
     try:
-        anew = autodiff(name=ad.name, val = np.cos(ad.val), der = ad.der)
+        anew = autodiff.autodiff(name=ad.name, val = np.cos(ad.val), der = ad.der)
         for key in ad.der:
             anew.der[key] = -np.sin(ad.val)*ad.der[key]
         return anew
@@ -84,13 +76,15 @@ def tan(ad):
 
     EXAMPLES
     =========
-    >>> x = autodiff('x', 10)
-    >>> f1 = tan(x)
-    >>> print(f1.val, fl.der)
-    0.6483608274590867 {'x': 1.4203717625834316}
+    >>> from autodiffpy import autodiff
+    >>> from autodiffpy import autodiff_math as admath
+    >>> x = autodiff.autodiff('x', 10)
+    >>> f1 = admath.tan(x)
+    >>> print(f1.val, f1.der)
+    0.6483608274590866 {'x': 1.4203717625834316}
     """
     try:
-        anew = autodiff(name=ad.name, val = np.tan(ad.val), der = ad.der)
+        anew = autodiff.autodiff(name=ad.name, val = np.tan(ad.val), der = ad.der)
         for key in ad.der:
             anew.der[key] = 1/(np.cos(ad.val))**2*ad.der[key]
         return anew
@@ -98,33 +92,42 @@ def tan(ad):
         print("Error: input should be autodiff instance only.")
 
 def log(ad):
-        
-        '''Returns autodiff instance of log(x)
 
-        INPUTS
-        ==========
-        ad: autodiff instance
+    '''Returns autodiff instance of log(x)
 
-        RETURNS
-        ==========
-        anew: autodiff instance with updated values and derivatives
+    INPUTS
+    ==========
+    ad: autodiff instance
 
-        EXAMPLES
-        ==========
-        >>> x = autodiff('x', np.exp(2))
-        >>> f1 = log(x)
-        >>> f1.val = 2.0
-        >>> f1.der = 0.1353352832366127
-        '''
+    RETURNS
+    ==========
+    anew: autodiff instance with updated values and derivatives
 
-        try:
-            if ad.val<=0:
-                raise ValueError
-            anew = autodiff(name = ad.name, val = np.log(ad.val), der = ad.der)
-            for key in ad.der:
-                anew.der[key] = ad.der[key]/ad.val
-            return anew
-        except TypeError:
-            print("Error: input should be autodiff instance")
-        except ValueError:
-            print('Error: cannot evaluate the log of a nonpositive number')
+    EXAMPLES
+    ==========
+    >>> from autodiffpy import autodiff
+    >>> from autodiffpy import autodiff_math as admath
+    >>> x = autodiff.autodiff('x', np.exp(2))
+    >>> f1 = admath.log(x)
+    >>> f1.val = 2.0
+    >>> f1.der = 0.1353352832366127
+    '''
+    if ad.val<=0:
+        raise ValueError('Error: cannot evaluate the log of a nonpositive number')
+    try:
+        anew = autodiff.autodiff(name = ad.name, val = np.log(ad.val), der = ad.der)
+        for key in ad.der:
+            anew.der[key] = ad.der[key]/ad.val
+        return anew
+    except TypeError:
+        print("Error: input should be autodiff instance")
+
+def exp(ad):
+    try:
+        anew = autodiff.autodiff(name=ad.name, val = np.exp(ad.val), der = ad.der)
+        for key in ad.der:
+            anew.der[key] = ad.der[key]*anew.val
+
+        return anew
+    except TypeError:
+        print("Error: input should be autodiff instance only.")

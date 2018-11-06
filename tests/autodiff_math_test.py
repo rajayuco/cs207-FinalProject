@@ -1,9 +1,8 @@
 import pytest
+from autodiffpy import autodiff as ad
+from autodiffpy import autodiff_math as admath
 import numpy as np
-import sys
-sys.path.append("..")
-import autodiffpy.autodiff as ad
-import autodiffpy.autodiff_math as admath
+
 
 ## Test sine function
 def test_sin_result_single():
@@ -20,17 +19,17 @@ def test_cos_result_single():
 ## Test tangent function
 def test_tan_result_single():
     x = ad.autodiff('x', 10)
-    assert ad.tan(admath.tan(x)).val == np.tan(np.tan(10))
-    assert ad.tan(admath.tan(x)).der['x'] == 1/np.cos(10)**2 * 1/np.cos(np.tan(10))**2
+    assert admath.tan(admath.tan(x)).val == np.tan(np.tan(10))
+    assert admath.tan(admath.tan(x)).der['x'] == 1/np.cos(10)**2 * 1/np.cos(np.tan(10))**2
 
 ## Test trigonometric types
 def test_trig_type():
 
-    with pytest.raises(TypeError):
+    with pytest.raises(AttributeError):
         admath.sin("green")
-    with pytest.raises(TypeError):
+    with pytest.raises(AttributeError):
         admath.cos("green")
-    with pytest.raises(TypeError):
+    with pytest.raises(AttributeError):
         admath.tan("green")
 
 ## Test exponential function
@@ -48,4 +47,4 @@ def test_log_result_single():
 def test_log_error_nonpositive():
     x = ad.autodiff('x', -1)
     with pytest.raises(ValueError):
-        np.log(-1)
+        admath.log(x)
