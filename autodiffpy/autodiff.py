@@ -65,7 +65,7 @@ class autodiff():
                 raise TypeError('please input a number or autodiff class')
         return anew
   
-    def __rdiv__(self, other):
+    def __rtruediv__(self, other):
         '''
         function for right division
         '''   
