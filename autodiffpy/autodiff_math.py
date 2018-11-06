@@ -1,8 +1,6 @@
 # import packages
 import numpy as np
-import sys 
-sys.path.append('..')
-from autodiffpy import autodiff
+import autodiff
 
 
 def sin(ad):
