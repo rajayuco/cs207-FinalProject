@@ -142,7 +142,7 @@ def exp(ad):
     ==========
     >>> from autodiffpy import autodiff
     >>> from autodiffpy import autodiff_math as admath
-    >>> x = ad.autodiff('x', 10)
+    >>> x = autodiff.autodiff('x', 10)
     >>> f1 = admath.exp(x)
     >>> f1.val = np.exp(10)
     '''
