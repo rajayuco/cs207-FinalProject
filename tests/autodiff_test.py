@@ -117,5 +117,5 @@ def test_pow_result_adandconst():
     assert abs(ad4.der["y"] - 23.526195443245132601) < 1E-16
 	
     assert abs(ad5.val - 11.390625) < 1E-10
-    assert abs(ad5.der["x"] - 13.855499296875) < 1E-10
+    assert abs(ad5.der["x"] - 13.855502991133679740) < 1E-10
     assert abs(ad5.der["y"] - 9.2370019940891198269) < 1E-10
