@@ -1,0 +1,19 @@
+[
+  "tests/autodiff_math_test.py::test_sin_result_single",
+  "tests/autodiff_math_test.py::test_cos_result_single",
+  "tests/autodiff_math_test.py::test_tan_result_single",
+  "tests/autodiff_math_test.py::test_trig_type",
+  "tests/autodiff_math_test.py::test_exp_result_single",
+  "tests/autodiff_math_test.py::test_log_result_single",
+  "tests/autodiff_math_test.py::test_log_error_nonpositive",
+  "tests/autodiff_test.py::test_truediv_result_ad",
+  "tests/autodiff_test.py::test_truediv_result_const",
+  "tests/autodiff_test.py::test_rtruediv_result_ad",
+  "tests/autodiff_test.py::test_mul_result_ad",
+  "tests/autodiff_test.py::test_mul_result_const",
+  "tests/autodiff_test.py::test_mul_err_types",
+  "tests/autodiff_test.py::test_neg_result_single",
+  "tests/autodiff_test.py::test_add_result_adandconst",
+  "tests/autodiff_test.py::test_sub_result_adandconst",
+  "tests/autodiff_test.py::test_pow_result_adandconst"
+]
