@@ -101,7 +101,7 @@ def test_sub_result_adandconst():
     
 ## Test power with a constant and an autodiff instance
 def test_pow_result_adandconst():
-    ad1 = adiff(name="x", val=2.5, der=1)
+    ad1 = adiff(name="x", val=2, der=1)
     ad2 = adiff(name="y", val=3, der=1)
     
     ad3 = ad1**(ad2**ad1)
