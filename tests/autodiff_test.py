@@ -3,6 +3,7 @@ from autodiffpy import autodiff as ad
 from autodiffpy import autodiff_math as admath
 
 
+
 ## Test true division with an autodiff instsance
 def test_truediv_result_ad():
     x = ad.autodiff('x', 10)
@@ -21,7 +22,7 @@ def test_truediv_result_const():
     assert f2.der['x'] == 1/3
 
 ## Test reverse division with an autodiff instance
-def test_rdiv_result_ad():
+def test_rtruediv_result_ad():
     x = ad.autodiff('x', 10)
     y = ad.autodiff('y', 2)
     f1 = y/x
@@ -104,7 +105,6 @@ def test_sub_result_adandconst():
 def test_pow_result_adandconst():
     ad1 = ad.autodiff(name="x", val=2.5, der=1)
     ad2 = ad.autodiff(name="y", val=3, der=1)
-
     ad3 = (ad1**ad2)**ad1
     ad4 = (ad1**1.5)**ad2
     ad5 = (1.5**ad1)**ad2

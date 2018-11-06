@@ -28,6 +28,7 @@ def sin(ad):
         anew = autodiff.autodiff(name=ad.name, val = np.sin(ad.val), der = ad.der)
         for key in ad.der:
             anew.der[key] = np.cos(ad.val)*ad.der[key]
+
         return anew
     except TypeError:
         print("Error: input should be autodiff instance only.")

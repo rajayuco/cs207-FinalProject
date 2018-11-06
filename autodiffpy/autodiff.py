@@ -1,4 +1,3 @@
-# import packages
 import numpy as np
 
 
@@ -69,8 +68,8 @@ class autodiff():
             except:
                 raise TypeError('Error: please input a number or autodiff class')
         return anew
-
-    def __rdiv__(self, other):
+  
+    def __rtruediv__(self, other):
         '''
         function for right division
         '''
@@ -96,14 +95,17 @@ class autodiff():
         return anew
 
 
+
     def __add__(self, other):
 
         if isinstance(other, str):
             raise ValueError("Error: input cannot be string type.")
+
         #Generate a new autodiff instance copy of self
         anew = autodiff(self.name, self.val, self.der)
         #Tries adding two autodiff instances together
         try:
+
 			#Add values
             anew.val = self.val + other.val
 
@@ -124,10 +126,12 @@ class autodiff():
 		#Otherwise, if not two autodiff instances:
         except AttributeError:
 			#Tries adding autodiff instance and number together
+
             try:
                 for key in self.der:
                     anew.der[key] = self.der[key]
                     anew.val = other + self.val
+
 
 			#Otherwise, raises a type error if not compatible
             except:
@@ -173,6 +177,7 @@ class autodiff():
 		#Otherwise, if not two autodiff instances:
         except AttributeError:
 			#Tries subtracting number from autodiff instance
+
             try:
                 for key in self.der:
                     anew.der[key] = self.der[key]
@@ -226,6 +231,7 @@ class autodiff():
 		#Otherwise, if not two autodiff instances:
         except AttributeError:
 			#Tries adding autodiff instance and number together
+
             try:
                 for key in self.der:
                     anew.der[key] = other*(self.val**(other - 1))*self.der[key]
@@ -242,10 +248,10 @@ class autodiff():
     def __rpow__(self, other):
         return self**other
 
-
     def jacobian(self):
         jacobian = [[],[]]
         for key in self.der:
             jacobian[0].append(key)
             jacobian[1].append(self.der[key])
+
         return jacobian
