@@ -1,0 +1,3 @@
+{
+  "tests/autodiff_test.py::test_pow_result_adandconst": true
+}
