@@ -128,6 +128,25 @@ def log(ad):
         print("Error: input should be autodiff instance")
 
 def exp(ad):
+    '''Returns autodiff instance of log(x)
+
+    INPUTS
+    ==========
+    ad: autodiff instance
+
+    RETURNS
+    ==========
+    anew: autodiff instance with updated values and derivatives
+
+    EXAMPLES
+    ==========
+    >>> from autodiffpy import autodiff
+    >>> from autodiffpy import autodiff_math as admath
+    >>> x = ad.autodiff('x', 10)
+    >>> f1 = admath.exp(x)
+    >>> f1.val = np.exp(10)
+    '''
+    
     try:
         anew = autodiff.autodiff(name=ad.name, val = np.exp(ad.val), der = ad.der)
         for key in ad.der:
