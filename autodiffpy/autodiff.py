@@ -227,8 +227,24 @@ class autodiff():
 		return anew
 	
 	
+	#FUNCTION: __rpow__
+	#PURPOSE: Raise this number to an autodiff instance, and calculate the derivatives resulting from this action.
 	def __rpow__(self, other):
-		return self**other
+		#Generate a new autodiff instance copy of self
+		anew = autodiff(self.name, self.val, self.der)
+		
+		#Tries autodiff instance and number together
+		try:
+			for key in self.der:
+				anew.der[key] = (other**self.val)*np.log(other)*self.der[key]
+				anew.val = other**self.val
+		
+		#Otherwise, raises a type error if not compatible
+		except:
+			raise TypeError('please input a number or autodiff class')
+		
+		#Return new autodiff instance
+		return anew
 	
 	
 	def jacobian(self):
