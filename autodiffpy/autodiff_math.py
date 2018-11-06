@@ -1,6 +1,6 @@
 # import packages
 import numpy as np
-import autodiff
+from autodiffpy import autodiff
 
 
 def sin(ad):
