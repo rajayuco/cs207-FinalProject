@@ -23,7 +23,7 @@ def test_truediv_result_const():
     assert f2.der['x'] == 1/3
 
 ## Test reverse division with an autodiff instance
-def test_rdiv_result_ad():
+def test_rtruediv_result_ad():
     x = ad.autodiff('x', 10)
     y = ad.autodiff('y', 2)
     f1 = y/x
