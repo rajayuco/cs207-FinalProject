@@ -1,6 +1,9 @@
 # import packages
 import numpy as np
-import autodiffpy.autodiff
+try:
+    import autodiff
+except:
+    from autodiffpy import autodiff
 
 def sin(ad):
     """Returns autodiff instance of sin(x)
@@ -16,8 +19,8 @@ def sin(ad):
 
     EXAMPLES
     =========
-    >>> import autodiffpy.autodiff as autodiff
-    >>> import autodiffpy.autodiff_math as admath
+    >>> from autodiffpy import autodiff
+    >>> from autodiffpy import autodiff_math as admath
     >>> x = autodiff.autodiff('x', 10)
     >>> f1 = admath.sin(x)
     >>> print(f1.val, f1.der)
@@ -46,8 +49,8 @@ def cos(ad):
 
     EXAMPLES
     =========
-    >>> import autodiffpy.autodiff as autodiff
-    >>> import autodiffpy.autodiff_math as admath
+    >>> from autodiffpy import autodiff
+    >>> from autodiffpy import autodiff_math as admath
     >>> x = autodiff.autodiff('x', 10)
     >>> f1 = admath.cos(x)
     >>> print(f1.val, f1.der)
@@ -75,8 +78,8 @@ def tan(ad):
 
     EXAMPLES
     =========
-    >>> import autodiffpy.autodiff as autodiff
-    >>> import autodiffpy.autodiff_math as admath
+    >>> from autodiffpy import autodiff
+    >>> from autodiffpy import autodiff_math as admath
     >>> x = autodiff.autodiff('x', 10)
     >>> f1 = admath.tan(x)
     >>> print(f1.val, f1.der)
@@ -104,8 +107,8 @@ def log(ad):
 
     EXAMPLES
     ==========
-    >>> import autodiffpy.autodiff as autodiff
-    >>> import autodiffpy.autodiff_math as admath
+    >>> from autodiffpy import autodiff
+    >>> from autodiffpy import autodiff_math as admath
     >>> x = autodiff.autodiff('x', np.exp(2))
     >>> f1 = admath.log(x)
     >>> f1.val = 2.0
@@ -134,8 +137,8 @@ def exp(ad):
 
     EXAMPLES
     ==========
-    >>> import autodiffpy.autodiff as autodiff
-    >>> import autodiffpy.autodiff_math as admath
+    >>> from autodiffpy import autodiff
+    >>> from autodiffpy import autodiff_math as admath
     >>> x = autodiff.autodiff('x', 10)
     >>> f1 = admath.exp(x)
     >>> f1.val = np.exp(10)

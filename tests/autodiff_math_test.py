@@ -4,8 +4,8 @@ import os
 sys.path.append('..')
 
 import pytest
-import autodiffpy.autodiff as ad
-import autodiffpy.autodiff_math as admath
+from autodiffpy import autodiff as ad
+from autodiffpy import autodiff_math as admath
 import numpy as np
 
 

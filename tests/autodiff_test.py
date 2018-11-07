@@ -5,7 +5,7 @@ import os
 sys.path.append('..')
 
 import pytest
-import autodiffpy.autodiff as ad
+from autodiffpy import autodiff as ad
 
 
 
