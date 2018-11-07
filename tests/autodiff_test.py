@@ -1,7 +1,5 @@
 import pytest
-import sys 
-sys.path.append('..')
-from autodiffpy import autodiff as ad
+import autodiffpy.autodiff as ad
 
 
 
