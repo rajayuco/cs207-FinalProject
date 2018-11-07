@@ -1,1 +1,5 @@
-{}
+{
+  "autodiffpy/autodiff_math.py::autodiffpy.autodiff_math.cos": true,
+  "autodiffpy/autodiff_math.py::autodiffpy.autodiff_math.sin": true,
+  "autodiffpy/autodiff_math.py::autodiffpy.autodiff_math.tan": true
+}

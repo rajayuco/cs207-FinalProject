@@ -1,4 +1,9 @@
 [
+  "autodiffpy/autodiff_math.py::autodiffpy.autodiff_math.cos",
+  "autodiffpy/autodiff_math.py::autodiffpy.autodiff_math.exp",
+  "autodiffpy/autodiff_math.py::autodiffpy.autodiff_math.log",
+  "autodiffpy/autodiff_math.py::autodiffpy.autodiff_math.sin",
+  "autodiffpy/autodiff_math.py::autodiffpy.autodiff_math.tan",
   "tests/autodiff_math_test.py::test_sin_result_single",
   "tests/autodiff_math_test.py::test_cos_result_single",
   "tests/autodiff_math_test.py::test_tan_result_single",
