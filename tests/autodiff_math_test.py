@@ -1,3 +1,8 @@
+import sys
+import os
+
+sys.path.append('..')
+
 import pytest
 import autodiffpy.autodiff as ad
 import autodiffpy.autodiff_math as admath
