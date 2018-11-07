@@ -16,7 +16,7 @@ def sin(ad):
 
     EXAMPLES
     =========
-    >>> import autodiffpy.autodiff
+    >>> import autodiffpy.autodiff as autodiff
     >>> import autodiffpy.autodiff_math as admath
     >>> x = autodiff.autodiff('x', 10)
     >>> f1 = admath.sin(x)
@@ -46,7 +46,7 @@ def cos(ad):
 
     EXAMPLES
     =========
-    >>> import autodiffpy.autodiff
+    >>> import autodiffpy.autodiff as autodiff
     >>> import autodiffpy.autodiff_math as admath
     >>> x = autodiff.autodiff('x', 10)
     >>> f1 = admath.cos(x)
@@ -75,7 +75,7 @@ def tan(ad):
 
     EXAMPLES
     =========
-    >>> import autodiffpy.autodiff
+    >>> import autodiffpy.autodiff as autodiff
     >>> import autodiffpy.autodiff_math as admath
     >>> x = autodiff.autodiff('x', 10)
     >>> f1 = admath.tan(x)
@@ -104,7 +104,7 @@ def log(ad):
 
     EXAMPLES
     ==========
-    >>> import autodiffpy.autodiff
+    >>> import autodiffpy.autodiff as autodiff
     >>> import autodiffpy.autodiff_math as admath
     >>> x = autodiff.autodiff('x', np.exp(2))
     >>> f1 = admath.log(x)
@@ -134,7 +134,7 @@ def exp(ad):
 
     EXAMPLES
     ==========
-    >>> import autodiffpy.autodiff
+    >>> import autodiffpy.autodiff as autodiff
     >>> import autodiffpy.autodiff_math as admath
     >>> x = autodiff.autodiff('x', 10)
     >>> f1 = admath.exp(x)
