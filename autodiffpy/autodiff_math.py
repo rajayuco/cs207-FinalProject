@@ -1,12 +1,6 @@
 # import packages
 import numpy as np
-import sys
-sys.path.append('..')
-try:
-    import autodiff
-except:
-    from autodiffpy import autodiff
-
+import autodiffpy.autodiff
 
 def sin(ad):
     """Returns autodiff instance of sin(x)
@@ -146,7 +140,7 @@ def exp(ad):
     >>> f1 = admath.exp(x)
     >>> f1.val = np.exp(10)
     '''
-    
+
     try:
         anew = autodiff.autodiff(name=ad.name, val = np.exp(ad.val), der = ad.der)
         for key in ad.der:
