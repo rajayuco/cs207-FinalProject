@@ -16,8 +16,8 @@ def sin(ad):
 
     EXAMPLES
     =========
-    >>> from autodiffpy import autodiff
-    >>> from autodiffpy import autodiff_math as admath
+    >>> import autodiffpy.autodiff
+    >>> import autodiffpy.autodiff_math as admath
     >>> x = autodiff.autodiff('x', 10)
     >>> f1 = admath.sin(x)
     >>> print(f1.val, f1.der)
@@ -46,8 +46,8 @@ def cos(ad):
 
     EXAMPLES
     =========
-    >>> from autodiffpy import autodiff
-    >>> from autodiffpy import autodiff_math as admath
+    >>> import autodiffpy.autodiff
+    >>> import autodiffpy.autodiff_math as admath
     >>> x = autodiff.autodiff('x', 10)
     >>> f1 = admath.cos(x)
     >>> print(f1.val, f1.der)
@@ -75,8 +75,8 @@ def tan(ad):
 
     EXAMPLES
     =========
-    >>> from autodiffpy import autodiff
-    >>> from autodiffpy import autodiff_math as admath
+    >>> import autodiffpy.autodiff
+    >>> import autodiffpy.autodiff_math as admath
     >>> x = autodiff.autodiff('x', 10)
     >>> f1 = admath.tan(x)
     >>> print(f1.val, f1.der)
@@ -104,8 +104,8 @@ def log(ad):
 
     EXAMPLES
     ==========
-    >>> from autodiffpy import autodiff
-    >>> from autodiffpy import autodiff_math as admath
+    >>> import autodiffpy.autodiff
+    >>> import autodiffpy.autodiff_math as admath
     >>> x = autodiff.autodiff('x', np.exp(2))
     >>> f1 = admath.log(x)
     >>> f1.val = 2.0
@@ -122,7 +122,7 @@ def log(ad):
         print("Error: input should be autodiff instance")
 
 def exp(ad):
-    '''Returns autodiff instance of log(x)
+    '''Returns autodiff instance of exp(x)
 
     INPUTS
     ==========
@@ -134,8 +134,8 @@ def exp(ad):
 
     EXAMPLES
     ==========
-    >>> from autodiffpy import autodiff
-    >>> from autodiffpy import autodiff_math as admath
+    >>> import autodiffpy.autodiff
+    >>> import autodiffpy.autodiff_math as admath
     >>> x = autodiff.autodiff('x', 10)
     >>> f1 = admath.exp(x)
     >>> f1.val = np.exp(10)
