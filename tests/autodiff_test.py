@@ -1,5 +1,5 @@
 import pytest
-import sys 
+import sys
 sys.path.append('..')
 from autodiffpy import autodiff as ad
 
@@ -10,9 +10,12 @@ def test_truediv_result_ad():
     x = ad.autodiff('x', 10)
     y = ad.autodiff('y', 2)
     f1 = x/y
+    f2 = 2*x/x
     assert f1.val == 5
     assert f1.der['x'] == 1/2
     assert f1.der['y'] == 10/4
+    assert f2.val == 2
+    assert f2.der['x'] == 0
 
 ## Test true division with a constant
 def test_truediv_result_const():
@@ -22,23 +25,39 @@ def test_truediv_result_const():
     assert f2.val == 10/3
     assert f2.der['x'] == 1/3
 
-## Test reverse division with an autodiff instance
-def test_rtruediv_result_ad():
+## Test true division error types
+def test_truediv_err_types():
+    x = ad.autodiff('x', 10)
+    s = "str"
+    with pytest.raises(ValueError):
+        x/s
+
+def test_rtruediv_err_types():
+    x = ad.autodiff('x', 10)
+    s = "str"
+    with pytest.raises(ValueError):
+        s/x
+
+## Test reverse division with a constant
+def test_rtruediv_result_const():
     x = ad.autodiff('x', 10)
     y = ad.autodiff('y', 2)
-    f1 = y/x
-    assert f1.val == 2/10
-    assert f1.der['x'] == 2/10**2
-    assert f1.der['y'] == 1/10
+    f2 = 3/x
+    assert f2.val == 3/10
+    assert f2.der['x'] == -3/100
+
 
 ## Test multiplication with an autodiff instance
 def test_mul_result_ad():
     x = ad.autodiff('x', 10)
     y = ad.autodiff('y', 2)
     f1 = x*y
+    f2 = x*x*x
     assert f1.val == 20
     assert f1.der['x'] == 2
     assert f1.der['y'] == 10
+    assert f2.val == 1000
+    assert f2.der['x'] == 300
 
 ## Test multiplication with a constant
 def test_mul_result_const():
@@ -57,8 +76,9 @@ def test_mul_err_types():
 ## Test unary function (negative)
 def test_neg_result_single():
     x = ad.autodiff('x', 10)
-    assert -x.val == -10
-    assert -x.der['x'] == -1
+    f = -x
+    assert f.val == -10
+    assert f.der['x'] == -1
 
 ## Test addition with a constant and an autodiff instance
 def test_add_result_adandconst():
@@ -81,6 +101,20 @@ def test_add_result_adandconst():
     assert ad5.der["x"] == 1
     assert ad5.der["y"] == 1
 
+## Test addition error types
+def test_add_err_types():
+    x = ad.autodiff('x', 10)
+    s = "str"
+    with pytest.raises(ValueError):
+        x+s
+
+## Test substraction error types
+def test_sub_err_types():
+    x = ad.autodiff('x', 10)
+    s = "str"
+    with pytest.raises(ValueError):
+        x-s
+
 ## Test subtraction with a constant and an autodiff instance
 def test_sub_result_adandconst():
     ad1 = ad.autodiff(name="x", val=2.5, der=1)
@@ -102,6 +136,19 @@ def test_sub_result_adandconst():
     assert ad5.der["x"] == -1
     assert ad5.der["y"] == -1
 
+## Test power error types
+def test_pow_err_types():
+    x = ad.autodiff('x', 10)
+    s = "str"
+    with pytest.raises(ValueError):
+        x**s
+
+## Test reverse power error types
+def test_revpow_err_types():
+    x = ad.autodiff('x', 10)
+    s = "str"
+    with pytest.raises(ValueError):
+        s**x
 ## Test power with a constant and an autodiff instance
 def test_pow_result_adandconst():
     ad1 = ad.autodiff(name="x", val=2, der=1)
@@ -121,3 +168,9 @@ def test_pow_result_adandconst():
     assert abs(ad5.val - 11.390625) < 1E-10
     assert abs(ad5.der["x"] - 13.855502991133679740) < 1E-10
     assert abs(ad5.der["y"] - 9.2370019940891198269) < 1E-10
+
+def test_jacobian():
+    x = ad.autodiff('x', 10)
+    y = ad.autodiff('y', 2)
+    f1 = x*y
+    assert f1.jacobian() == [['x', 'y'], [2, 10]]

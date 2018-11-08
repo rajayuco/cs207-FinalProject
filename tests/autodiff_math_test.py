@@ -1,9 +1,10 @@
 import pytest
-import sys 
+import sys
 sys.path.append('..')
 from autodiffpy import autodiff as ad
 from autodiffpy import autodiff_math as admath
 import numpy as np
+
 
 
 ## Test sine function
@@ -38,6 +39,17 @@ def test_trig_type():
 def test_exp_result_single():
     x = ad.autodiff('x', 10)
     assert admath.exp(x).val == np.exp(10)
+
+
+## Test logarithm types
+def test_exp_types():
+    with pytest.raises(AttributeError):
+        admath.exp(1)
+
+## Test logarithm types
+def test_log_types():
+    with pytest.raises(AttributeError):
+        admath.log(1)
 
 ## Test logarithm function
 def test_log_result_single():

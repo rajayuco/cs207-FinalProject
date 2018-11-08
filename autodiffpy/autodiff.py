@@ -17,8 +17,8 @@ class autodiff():
     def __mul__(self, other):
         """Allows multiplication of another autodiff instance, or multiplication of a constant (integer or float)."""
 
-        if isinstance(other, str):
-            raise ValueError("Error: input cannot be string type.")
+        if isinstance(other, (int, float, autodiff)) == False:
+            raise ValueError("Error: Only integer, float, or autodiff instances can be multiplied.")
 
         anew = autodiff(self.name, self.val, self.der)
         #assuming that other is autodiff instance
@@ -34,12 +34,10 @@ class autodiff():
         # if 'other' is not autodiff instance
         except AttributeError:
             # assuming that 'other' is a valid constant
-            try:
-                for key in self.der:
-                    anew.der[key] = other*self.der[key]
-                    anew.val = other*self.val
-            except:
-                raise TypeError('Error: please input a number or autodiff class.')
+            for key in self.der:
+                anew.der[key] = other*self.der[key]
+                anew.val = other*self.val
+
         return anew
 
     __rmul__ = __mul__
@@ -47,8 +45,8 @@ class autodiff():
     def __truediv__(self,other):
         '''function for left division'''
 
-        if isinstance(other, str):
-            raise ValueError("Error: input cannot be string type.")
+        if isinstance(other, (int, float, autodiff)) == False:
+            raise ValueError("Error: Only integer, float, or autodiff instances can be divided.")
 
         anew = autodiff(self.name, self.val, self.der)
         try:
@@ -59,47 +57,34 @@ class autodiff():
                 elif key not in other.der:
                     anew.der[key]=self.der[key]/other.val
                 else:
-                    anew.der[key]=self.der[key]/other.der[key]
+                    anew.der[key]=0
         except AttributeError:
-            try:
-                for key in self.der:
-                    anew.der[key] = self.der[key]/other
-                    anew.val = self.val/other
-            except:
-                raise TypeError('Error: please input a number or autodiff class')
+            for key in self.der:
+                anew.der[key] = self.der[key]/other
+                anew.val = self.val/other
         return anew
-  
+
+
     def __rtruediv__(self, other):
-        '''
-        function for right division
-        '''
-        if isinstance(other, str):
-            raise ValueError("Error: input cannot be string type.")
-        anew = autodiff(self.name, self.val, self.der)
-        try:
-            anew.val = self.val/other.val
-            for key in np.unique([key for key in self.der] + [key for key in other.der]):
-                if key not in self.der:
-                    anew.der[key]=other.der[key]/self.val
-                elif key not in other.der:
-                    anew.der[key]=self.der[key]*other.val[key]/self.val**2
-                else:
-                    anew.der[key]=self.der[key]/other.der[key]
-        except AttributeError:
-            try:
-                for key in self.der:
-                    anew.der[key] = self.der[key]/other
-                    anew.val = self.val/2
-            except:
-                raise TypeError('Error: please input a number or autodiff class')
-        return anew
+
+        '''function for right division, when performing (constant)/(autodiff)'''
+
+        if isinstance(other, (int,float)):
+            anew = autodiff(self.name, self.val, self.der)
+            for key in self.der:
+                anew.der[key] = -other*self.der[key]/self.val**2
+                anew.val = other/self.val
+            return anew
+        else:
+            raise ValueError("Error: Only integer, float, or autodiff instances can be divided.")
 
 
 
     def __add__(self, other):
 
-        if isinstance(other, str):
-            raise ValueError("Error: input cannot be string type.")
+        if isinstance(other, (int, float, autodiff)) == False:
+            raise ValueError("Error: Only integer, float, or autodiff instances can be added.")
+
 
         #Generate a new autodiff instance copy of self
         anew = autodiff(self.name, self.val, self.der)
@@ -127,15 +112,9 @@ class autodiff():
         except AttributeError:
             #Tries adding autodiff instance and number together
 
-            try:
-                for key in self.der:
-                    anew.der[key] = self.der[key]
-                    anew.val = other + self.val
-
-
-            #Otherwise, raises a type error if not compatible
-            except:
-                raise TypeError('Error: please input a number or autodiff class')
+            for key in self.der:
+                anew.der[key] = self.der[key]
+                anew.val = other + self.val
 
         #Returns new autodiff instance
         return anew
@@ -150,8 +129,9 @@ class autodiff():
     #FUNCTION: __sub__
     #PURPOSE: Subtract an autodiff instance or number from a autodiff instance, and calculate the derivatives resulting from this action.
     def __sub__(self, other):
-        if isinstance(other, str):
-            raise ValueError("Error: input cannot be string type.")
+        if isinstance(other, (int, float, autodiff)) == False:
+            raise ValueError("Error: Only integer, float, or autodiff instances can be subtracted.")
+
         #Generate a new autodiff instance copy of self
         anew = autodiff(self.name, self.val, self.der)
 
@@ -178,14 +158,9 @@ class autodiff():
         except AttributeError:
             #Tries subtracting number from autodiff instance
 
-            try:
-                for key in self.der:
-                    anew.der[key] = self.der[key]
-                    anew.val = self.val - other
-
-            #Otherwise, raises a type error if not compatible
-            except:
-                raise TypeError('Error: please input a number or autodiff class')
+            for key in self.der:
+                anew.der[key] = self.der[key]
+                anew.val = self.val - other
 
         #Returns new autodiff instance
         return anew
@@ -198,13 +173,12 @@ class autodiff():
         return (-1*self) + other
 
 
-
     #FUNCTION: __pow__
     #PURPOSE: Raise this autodiff instance to a number or to another autodiff instance, and calculate the derivatives resulting from this action.
     def __pow__(self, other):
 
-        if isinstance(other, str):
-            raise ValueError("Error: input cannot be string type.")
+        if isinstance(other, (int, float, autodiff)) == False:
+            raise ValueError("Error: Only integer, float, or autodiff instances can be multiplied.")
 
         #Generate a new autodiff instance copy of self
         anew = autodiff(self.name, self.val, self.der)
@@ -232,14 +206,9 @@ class autodiff():
         except AttributeError:
             #Tries adding autodiff instance and number together
 
-            try:
-                for key in self.der:
-                    anew.der[key] = other*(self.val**(other - 1))*self.der[key]
-                    anew.val = self.val**other
-
-            #Otherwise, raises a type error if not compatible
-            except:
-                raise TypeError('Error: please input a number or autodiff class')
+            for key in self.der:
+                anew.der[key] = other*(self.val**(other - 1))*self.der[key]
+                anew.val = self.val**other
 
         #Returns new autodiff instance
         return anew
@@ -248,19 +217,17 @@ class autodiff():
     #FUNCTION: __rpow__
     #PURPOSE: Raise this number to an autodiff instance, and calculate the derivatives resulting from this action.
     def __rpow__(self, other):
+        if isinstance(other, (int, float, autodiff)) == False:
+            raise ValueError("Error: Only integer, float, or autodiff instances can be multiplied.")
+
         #Generate a new autodiff instance copy of self
         anew = autodiff(self.name, self.val, self.der)
-        
+
         #Tries autodiff instance and number together
-        try:
-            for key in self.der:
-                anew.der[key] = (other**self.val)*np.log(other)*self.der[key]
-                anew.val = other**self.val
-        
-        #Otherwise, raises a type error if not compatible
-        except:
-            raise TypeError('please input a number or autodiff class')
-        
+        for key in self.der:
+            anew.der[key] = (other**self.val)*np.log(other)*self.der[key]
+            anew.val = other**self.val
+
         #Return new autodiff instance
         return anew
 

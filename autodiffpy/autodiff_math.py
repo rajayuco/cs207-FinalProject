@@ -33,10 +33,10 @@ def sin(ad):
         anew = autodiff.autodiff(name=ad.name, val = np.sin(ad.val), der = ad.der)
         for key in ad.der:
             anew.der[key] = np.cos(ad.val)*ad.der[key]
-
         return anew
-    except TypeError:
-        print("Error: input should be autodiff instance only.")
+    except AttributeError:
+        raise AttributeError("Error: input should be autodiff instance only.")
+
 
 def cos(ad):
     """Returns autodiff instance of cos(x)
@@ -64,8 +64,8 @@ def cos(ad):
         for key in ad.der:
             anew.der[key] = -np.sin(ad.val)*ad.der[key]
         return anew
-    except TypeError:
-        print("Error: input should be autodiff instance only.")
+    except AttributeError:
+        raise AttributeError("Error: input should be autodiff instance only.")
 
 def tan(ad):
     """Returns autodiff instance of tan(x)
@@ -93,8 +93,8 @@ def tan(ad):
         for key in ad.der:
             anew.der[key] = 1/(np.cos(ad.val))**2*ad.der[key]
         return anew
-    except TypeError:
-        print("Error: input should be autodiff instance only.")
+    except AttributeError:
+        raise AttributeError("Error: input should be autodiff instance only.")
 
 def log(ad):
 
@@ -117,15 +117,19 @@ def log(ad):
     >>> f1.val = 2.0
     >>> f1.der = 0.1353352832366127
     '''
-    if ad.val<=0:
-        raise ValueError('Error: cannot evaluate the log of a nonpositive number')
+
+
     try:
+        if ad.val<=0:
+            raise ValueError('Error: cannot evaluate the log of a nonpositive number')
+
         anew = autodiff.autodiff(name = ad.name, val = np.log(ad.val), der = ad.der)
+
         for key in ad.der:
             anew.der[key] = ad.der[key]/ad.val
         return anew
-    except TypeError:
-        print("Error: input should be autodiff instance")
+    except AttributeError:
+        raise AttributeError("Error: input should be autodiff instance only.")
 
 def exp(ad):
     '''Returns autodiff instance of exp(x)
@@ -153,5 +157,5 @@ def exp(ad):
             anew.der[key] = ad.der[key]*anew.val
 
         return anew
-    except TypeError:
-        print("Error: input should be autodiff instance only.")
+    except AttributeError:
+        raise AttributeError("Error: input should be autodiff instance only.")
