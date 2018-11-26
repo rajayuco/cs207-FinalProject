@@ -6,6 +6,42 @@ class autodiff():
         self.name = name
         self.val = val
         self.der = {name:der}
+        self.lparent = None
+        self.rparent = None
+        self.back_der = None
+        self.back_partial_der = None
+        # self.func = None
+
+    def backprop(self, backproplist = None):
+        if backproplist == None:
+            backproplist = []
+            self.back_der = 1
+        if self.lparent:
+            try:
+                self.lparent.back_der = self.back_der*self.lparent.back_partial_der
+                self.lparent.backprop(backproplist)
+            except:
+                pass
+        if self.rparent:
+            try:
+                self.rparent.back_der = self.back_der*self.rparent.back_partial_der
+                self.rparent.backprop(backproplist)
+            except:
+                pass
+        if self.lparent is None and self.rparent is None:
+            backproplist.append((self.name,self.back_partial_der,self.back_der))
+
+        return backproplist
+
+
+    def __eq__(self, other):
+        if isinstance(other, autodiff) == False:
+            raise ValueError("Error: only autodiff instances can be compared with another.")
+        return (self.val == other.val) and (self.der == other.der)
+
+    def __ne__(self, other):
+        return not (self == other)
+
 
     def __neg__(self):
         """Allows unary operation of autodiff instance."""
@@ -14,6 +50,8 @@ class autodiff():
             anew.der[key] = -self.der[key]
         return anew
 
+
+
     def __mul__(self, other):
         """Allows multiplication of another autodiff instance, or multiplication of a constant (integer or float)."""
 
@@ -21,6 +59,11 @@ class autodiff():
             raise ValueError("Error: Only integer, float, or autodiff instances can be multiplied.")
 
         anew = autodiff(self.name, self.val, self.der)
+
+        #Stores for backpropagation functionality
+        anew.lparent = self
+        anew.rparent = other
+
         #assuming that other is autodiff instance
         try:
             anew.val = self.val*other.val
@@ -31,12 +74,18 @@ class autodiff():
                     anew.der[key]=self.der[key]*other.val
                 else:
                     anew.der[key]=self.der[key]*other.val+other.der[key]*self.val
+
+            #set the back partial derivatives that can be used for backpropagation
+            self.back_partial_der = other.val
+            other.back_partial_der = self.val
+
         # if 'other' is not autodiff instance
         except AttributeError:
             # assuming that 'other' is a valid constant
             for key in self.der:
                 anew.der[key] = other*self.der[key]
                 anew.val = other*self.val
+                self.back_partial_der = other
 
         return anew
 
@@ -88,6 +137,11 @@ class autodiff():
 
         #Generate a new autodiff instance copy of self
         anew = autodiff(self.name, self.val, self.der)
+
+        anew.lparent = self
+        anew.rparent = other
+
+
         #Tries adding two autodiff instances together
         try:
 
@@ -108,6 +162,9 @@ class autodiff():
                 else:
                     anew.der[key] = self.der[key] + other.der[key]
 
+            self.back_partial_der = 1
+            other.back_partial_der = 1
+
         #Otherwise, if not two autodiff instances:
         except AttributeError:
             #Tries adding autodiff instance and number together
@@ -115,6 +172,7 @@ class autodiff():
             for key in self.der:
                 anew.der[key] = self.der[key]
                 anew.val = other + self.val
+            self.back_partial_der = 1
 
         #Returns new autodiff instance
         return anew
@@ -183,6 +241,9 @@ class autodiff():
         #Generate a new autodiff instance copy of self
         anew = autodiff(self.name, self.val, self.der)
 
+        anew.lparent = self
+        anew.rparent = other
+
         #Tries raising this autodiff instance to another autodiff instance
         try:
             #Raise values
@@ -202,14 +263,16 @@ class autodiff():
                 else:
                     anew.der[key] = anew.val*((np.log(self.val)*other.der[key]) + (other.val*self.der[key]/1.0/self.val))
 
+            self.back_partial_der = other.val*self.val**(other.val-1)
+            other.back_partial_der = (self.val**other.val)*np.log(self.val)
+
         #Otherwise, if not two autodiff instances:
         except AttributeError:
             #Tries adding autodiff instance and number together
-
             for key in self.der:
                 anew.der[key] = other*(self.val**(other - 1))*self.der[key]
                 anew.val = self.val**other
-
+            self.back_partial_der = other*self.val**(other-1)
         #Returns new autodiff instance
         return anew
 
