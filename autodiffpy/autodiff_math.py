@@ -285,7 +285,7 @@ def arctan(ad):
     >>> x = autodiff.autodiff('x', 0.2)
     >>> f1 = admath.arctan(x)
     >>> print(f1.val, f1.der)
-     0.19739555984988078 {'x': 0.9615384615384615}
+    0.19739555984988078 {'x': 0.9615384615384615}
     """
     try:
         anew = autodiff.autodiff(name=ad.name, val = np.arctan(ad.val), der = ad.der)
