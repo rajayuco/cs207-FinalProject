@@ -253,14 +253,14 @@ def tanh(ad):
     >>> f1 = admath.tanh(x)
     >>> print(f1.val == np.tanh(5))
     True
-    >>> print(f1.der['x'] == (np.sech(5))**2)
+    >>> print(f1.der['x'] == (1.0/np.cosh(5))**2)
     True
     '''
 
     try:
         anew = autodiff.autodiff(name=ad.name, val = np.tanh(ad.val), der = ad.der)
         for key in ad.der:
-            anew.der[key] = ad.der[key]*((np.sech(ad.val))**2)
+            anew.der[key] = ad.der[key]*((1.0/np.cosh(ad.val))**2)
 
         return anew
     except AttributeError:

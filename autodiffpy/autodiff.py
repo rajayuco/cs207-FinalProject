@@ -6,22 +6,22 @@ class autodiff():
         self.name = name
         self.val = val
         self.der = {name:der}
-	
-	def __eq__(self, other):
-		"""Allows comparison of autodiff instance with other quantities.  Will return True only if this autodiff instance is compared to another autodiff instance with equal value and derivative(s).  Note that the 'name' attribute is not considered in this comparison."""
-		try: #assuming that other is an autodiff instance
-			if (self.val != other.val): #check for equal values
-				return False
-			if len(self.der) != len(other.der): #check for equal number of derivatives
-				return False
-			for key in self.der: #check if equal derivatives
-				if self.der[key] != other.der[key]:
-					return False
-		except AttributeError: #if not two autodiff instances
-			return False
-		except KeyError: #if different variables in derivative dictionaries
-			return False
-		return True #otherwise, must be "equal" autodiff instances
+    
+    def __eq__(self, other):
+        """Allows comparison of autodiff instance with other quantities.  Will return True only if this autodiff instance is compared to another autodiff instance with equal value and derivative(s).  Note that the 'name' attribute is not considered in this comparison."""
+        try: #assuming that other is an autodiff instance
+            if (self.val != other.val): #check for equal values
+                return False
+            if len(self.der) != len(other.der): #check for equal number of derivatives
+                return False
+            for key in self.der: #check if equal derivatives
+                if self.der[key] != other.der[key]:
+                    return False
+        except AttributeError: #if not two autodiff instances
+            return False
+        except KeyError: #if different variables in derivative dictionaries
+            return False
+        return True #otherwise, must be "equal" autodiff instances
 
     def __neg__(self):
         """Allows unary operation of autodiff instance."""

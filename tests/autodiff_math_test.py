@@ -89,25 +89,25 @@ def test_cosh_result_single():
 def test_tanh_result_single():
     x = ad.autodiff('x', 10)
     assert admath.tanh(admath.tanh(x)).val == np.tanh(np.tanh(10))
-    assert admath.tanh(admath.tanh(x)).der['x'] == ((np.sech(10))**2)*((np.sech(np.tanh(10)))**2)
+    assert admath.tanh(admath.tanh(x)).der['x'] == ((1.0/np.cosh(10))**2)*((1.0/np.cosh(np.tanh(10)))**2)
 
 
 ## Test logistic types
 def test_logistic_types():
+    x = ad.autodiff('x', 10)
     with pytest.raises(AttributeError):
-        admath.logistic(1)
+        admath.logistic(1, k="w")
     with pytest.raises(TypeError):
-        admath.logistic(1, A="wow", k=0, x0=1)
+        admath.logistic(x, A="wow", k=0, x0=1)
     with pytest.raises(TypeError):
-        admath.logistic(1, A=3.0, k=None, x0=-1.0)
+        admath.logistic(x, A=3.0, k=None, x0=-1.0)
     with pytest.raises(TypeError):
-        admath.logistic(1, A=0.0, k=0.0, x0="3")
+        admath.logistic(x, A=0.0, k=0.0, x0="3")
 
 ## Test logistic function
 def test_logistic_result_single():
     x = ad.autodiff('x', 10)
-    adinner = -1.0/(1.0 + np.exp(-1*3.5*(x - -2)))
-    assert admath.logistic(admath.logistic(x, A=-1, k=3.5, x0=-2), A=2, k=-1, x0=5).val == 2.0/(1.0 + np.exp(-1*-1*(adinner - 5)))
-    assert admath.tanh(admath.tanh(x)).der['x'] == ((np.sech(10))**2)*((np.sech(np.tanh(10)))**2)
-
+    
+    assert admath.logistic(admath.logistic(x)).val == 1.0/(1.0 + np.exp(-1*(1.0/(1 + np.exp(-10)))))
+    assert admath.logistic(admath.logistic(x, A=-1, k=3.5, x0=-2), A=2, k=-1, x0=5).val == 2.0/(1.0 + np.exp(-1*-1*((-1.0/(1.0 + np.exp(-1*3.5*(10 - -2)))) - 5)))
 

@@ -2,18 +2,24 @@ import pytest
 import sys
 sys.path.append('..')
 from autodiffpy import autodiff as ad
+from autodiffpy import autodiff_math as admath
 
 
 
 ## Test equality
 def test_eq_result():
     x = ad.autodiff('x', 10)
-    y = ad.autodiff('y', 10)
+    y = ad.autodiff('x', 10)
     z = ad.autodiff('z', 15)
     w = ad.autodiff('w', 100)
+    u = ad.autodiff('u', 0)
+    v = ad.autodiff('v', 1)
     
     assert(x == y)
-    assert(admath.sin(x) == admath.sin(y))
+    assert(u+1 != admath.cos(u))
+    assert(x != y*v)
+    assert(x*y != w*v)
+    assert(x/y+z == z+x/y)
     assert(x*y == y*x)
     assert(x*y != x*z)
     assert(x*y != w)
