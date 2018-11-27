@@ -2,6 +2,7 @@ import pytest
 import sys
 sys.path.append('..')
 from autodiffpy import autodiff as ad
+from autodiffpy import autodiff_math as admath
 
 
 

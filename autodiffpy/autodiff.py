@@ -6,6 +6,7 @@ class autodiff():
         self.name = name
         self.val = val
         self.der = {name:der}
+
         self.lparent = None
         self.rparent = None
         self.back_der = None
@@ -41,7 +42,6 @@ class autodiff():
 
     def __ne__(self, other):
         return not (self == other)
-
 
     def __neg__(self):
         """Allows unary operation of autodiff instance."""
