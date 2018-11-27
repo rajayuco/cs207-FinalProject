@@ -6,6 +6,35 @@ from autodiffpy import autodiff_math as admath
 
 
 
+
+def test_eq():
+    x = ad.autodiff('x', 10)
+    y = ad.autodiff('y', 2)
+    f1 = x*y
+    f2 = y*x
+    assert f1 == f2
+
+def test_eq_errortypes():
+    x = ad.autodiff('x', 10)
+    f1 = x + 2
+    f2 = "hey"
+    with pytest.raises(ValueError):
+        f1 == f2
+
+def test_ne():
+    x = ad.autodiff('x', 10)
+    y = ad.autodiff('y', 2)
+    f1 = x*y
+    f2 = y*y
+    assert f1 != f2
+
+def test_ne_errortypes():
+    x = ad.autodiff('x', 10)
+    y = 1
+    f1 = x**2
+    with pytest.raises(ValueError):
+        f1 == y
+
 ## Test true division with an autodiff instsance
 def test_truediv_result_ad():
     x = ad.autodiff('x', 10)
