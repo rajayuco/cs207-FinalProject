@@ -5,6 +5,21 @@ from autodiffpy import autodiff as ad
 
 
 
+## Test equality
+def test_eq_result():
+    x = ad.autodiff('x', 10)
+    y = ad.autodiff('y', 10)
+    z = ad.autodiff('z', 15)
+    w = ad.autodiff('w', 100)
+    
+    assert(x == y)
+    assert(admath.sin(x) == admath.sin(y))
+    assert(x*y == y*x)
+    assert(x*y != x*z)
+    assert(x*y != w)
+    assert(x != 10)
+    assert(x != z)
+
 ## Test true division with an autodiff instsance
 def test_truediv_result_ad():
     x = ad.autodiff('x', 10)

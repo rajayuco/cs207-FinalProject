@@ -110,12 +110,15 @@ def log(ad):
 
     EXAMPLES
     ==========
+    >>> import numpy as np
     >>> from autodiffpy import autodiff
     >>> from autodiffpy import autodiff_math as admath
     >>> x = autodiff.autodiff('x', np.exp(2))
     >>> f1 = admath.log(x)
-    >>> f1.val = 2.0
-    >>> f1.der = 0.1353352832366127
+    >>> print(f1.val)
+    2.0
+    >>> print(f1.der['x'])
+    0.1353352832366127
     '''
 
 
@@ -144,11 +147,15 @@ def exp(ad):
 
     EXAMPLES
     ==========
+    >>> import numpy as np
     >>> from autodiffpy import autodiff
     >>> from autodiffpy import autodiff_math as admath
     >>> x = autodiff.autodiff('x', 10)
     >>> f1 = admath.exp(x)
-    >>> f1.val = np.exp(10)
+    >>> print(f1.val == np.exp(10))
+    True
+    >>> print(f1.der['x'] == np.exp(10))
+    True
     '''
 
     try:
@@ -159,3 +166,145 @@ def exp(ad):
         return anew
     except AttributeError:
         raise AttributeError("Error: input should be autodiff instance only.")
+
+def sinh(ad):
+    '''Returns autodiff instance of sinh(x)
+
+    INPUTS
+    ==========
+    ad: autodiff instance
+
+    RETURNS
+    ==========
+    anew: autodiff instance with updated values and derivatives
+
+    EXAMPLES
+    ==========
+    >>> import numpy as np
+    >>> from autodiffpy import autodiff
+    >>> from autodiffpy import autodiff_math as admath
+    >>> x = autodiff.autodiff('x', 5)
+    >>> f1 = admath.sinh(x)
+    >>> print(f1.val == np.sinh(5))
+    True
+    >>> print(f1.der['x'] == np.cosh(5))
+    True
+    '''
+
+    try:
+        anew = autodiff.autodiff(name=ad.name, val = np.sinh(ad.val), der = ad.der)
+        for key in ad.der:
+            anew.der[key] = ad.der[key]*np.cosh(ad.val)
+
+        return anew
+    except AttributeError:
+        raise AttributeError("Error: input should be autodiff instance only.")
+
+def cosh(ad):
+    '''Returns autodiff instance of cosh(x)
+
+    INPUTS
+    ==========
+    ad: autodiff instance
+
+    RETURNS
+    ==========
+    anew: autodiff instance with updated values and derivatives
+
+    EXAMPLES
+    ==========
+    >>> import numpy as np
+    >>> from autodiffpy import autodiff
+    >>> from autodiffpy import autodiff_math as admath
+    >>> x = autodiff.autodiff('x', 5)
+    >>> f1 = admath.cosh(x)
+    >>> print(f1.val == np.cosh(5))
+    True
+    >>> print(f1.der['x'] == np.sinh(5))
+    True
+    '''
+
+    try:
+        anew = autodiff.autodiff(name=ad.name, val = np.cosh(ad.val), der = ad.der)
+        for key in ad.der:
+            anew.der[key] = ad.der[key]*np.sinh(ad.val)
+
+        return anew
+    except AttributeError:
+        raise AttributeError("Error: input should be autodiff instance only.")
+
+def tanh(ad):
+    '''Returns autodiff instance of tanh(x)
+
+    INPUTS
+    ==========
+    ad: autodiff instance
+
+    RETURNS
+    ==========
+    anew: autodiff instance with updated values and derivatives
+
+    EXAMPLES
+    ==========
+    >>> import numpy as np
+    >>> from autodiffpy import autodiff
+    >>> from autodiffpy import autodiff_math as admath
+    >>> x = autodiff.autodiff('x', 5)
+    >>> f1 = admath.tanh(x)
+    >>> print(f1.val == np.tanh(5))
+    True
+    >>> print(f1.der['x'] == (np.sech(5))**2)
+    True
+    '''
+
+    try:
+        anew = autodiff.autodiff(name=ad.name, val = np.tanh(ad.val), der = ad.der)
+        for key in ad.der:
+            anew.der[key] = ad.der[key]*((np.sech(ad.val))**2)
+
+        return anew
+    except AttributeError:
+        raise AttributeError("Error: input should be autodiff instance only.")
+
+def logistic(ad, A=1.0, k=1.0, x0=0.0):
+    '''Returns autodiff instance of the logistic function of x
+
+    INPUTS
+    ==========
+    ad: autodiff instance
+    A: maximum value of this logistic function
+    k: growth rate (steepness) of the logistic function
+    x0: x-axis location of the logistic function's midpoint
+
+    RETURNS
+    ==========
+    anew: autodiff instance with updated values and derivatives
+
+    EXAMPLES
+    ==========
+    >>> import numpy as np
+    >>> from autodiffpy import autodiff
+    >>> from autodiffpy import autodiff_math as admath
+    >>> x = autodiff.autodiff('x', 5)
+    >>> f1 = admath.logistic(x, A=3, k=4, x0=7)
+    >>> testresult = 3.0/(1 + np.exp(-4*(5-7)))
+    >>> print(f1.val == testresult)
+    True
+    >>> print(f1.der['x'] == testresult*(1 - testresult))
+    True
+    '''
+
+    try:
+        anew = autodiff.autodiff(name=ad.name, val = (A/1.0/(1.0 + np.exp(-1.0*k*(ad.val - x0)))), der = ad.der)
+        for key in ad.der:
+            anew.der[key] = (A*k*ad.der[key])*np.exp(-1.0*k*(ad.val - x0))/1.0/((np.exp(-1.0*k*(ad.val - x0)) + 1.0)**2)
+
+        return anew
+    except AttributeError:
+        raise AttributeError("Error: input should be autodiff instance only.")
+    except TypeError:
+        raise TypeError("Error: input attributes A, k, and x0 should be numbers.")
+
+
+
+#
