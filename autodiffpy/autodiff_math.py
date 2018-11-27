@@ -290,7 +290,7 @@ def logistic(ad, A=1.0, k=1.0, x0=0.0):
     >>> testresult = 3.0/(1 + np.exp(-4*(5-7)))
     >>> print(f1.val == testresult)
     True
-    >>> print(f1.der['x'] == 12*np.exp(-4*(5 - 7))/1.0/((np.exp(-4*(5 - 7)) + 1)**2)
+    >>> print(f1.der['x'] == 12*np.exp(-4*(5 - 7))/1.0/((np.exp(-4*(5 - 7)) + 1)**2))
     True
     '''
 
