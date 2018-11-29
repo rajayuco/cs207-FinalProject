@@ -1,9 +1,10 @@
 import pytest
 import sys
+import numpy as np
+
 sys.path.append('..')
 from autodiffpy import autodiff as ad
 from autodiffpy import autodiff_math as admath
-
 
 
 
@@ -204,3 +205,9 @@ def test_jacobian():
     y = ad.autodiff('y', 2)
     f1 = x*y
     assert f1.jacobian() == [['x', 'y'], [2, 10]]
+
+def test_backprop():
+    x = ad.autodiff('x', 3)
+    f = admath.sin(admath.cos(admath.tan(admath.log(x))))
+    # f.backprop() = {'x': array([-1.38686635])}
+    assert f.backprop()['x'][0] == -1.386866349701885

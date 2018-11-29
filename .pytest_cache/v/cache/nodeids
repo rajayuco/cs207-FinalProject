@@ -12,6 +12,13 @@
   "tests/autodiff_math_test.py::test_log_result_single",
   "tests/autodiff_math_test.py::test_log_result_base",
   "tests/autodiff_math_test.py::test_log_error_nonpositive",
+  "tests/autodiff_math_test.py::test_log_error_nonpositive_listvals",
+  "tests/autodiff_math_test.py::test_hyperbolic_types",
+  "tests/autodiff_math_test.py::test_sinh_result_single",
+  "tests/autodiff_math_test.py::test_cosh_result_single",
+  "tests/autodiff_math_test.py::test_tanh_result_single",
+  "tests/autodiff_math_test.py::test_logistic_types",
+  "tests/autodiff_math_test.py::test_logistic_result_single",
   "tests/autodiff_math_test.py::test_arcsin_value",
   "tests/autodiff_math_test.py::test_arcsin_types",
   "tests/autodiff_math_test.py::test_arcsin_error_nonpositive",
@@ -40,5 +47,6 @@
   "tests/autodiff_test.py::test_pow_err_types",
   "tests/autodiff_test.py::test_revpow_err_types",
   "tests/autodiff_test.py::test_pow_result_adandconst",
-  "tests/autodiff_test.py::test_jacobian"
+  "tests/autodiff_test.py::test_jacobian",
+  "tests/autodiff_test.py::test_backprop"
 ]
