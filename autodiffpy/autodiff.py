@@ -11,11 +11,10 @@ class autodiff():
         self.rparent = None
         self.back_der = None
         self.back_partial_der = None
-        # self.func = None
 
     def backprop(self, backproplist = None):
         if backproplist == None:
-            backproplist = []
+            backproplist = {}
             self.back_der = 1
         if self.lparent:
             try:
@@ -30,7 +29,7 @@ class autodiff():
             except:
                 pass
         if self.lparent is None and self.rparent is None:
-            backproplist.append((self.name,self.back_partial_der,self.back_der))
+            backproplist[self.name] = self.back_der
 
         return backproplist
 

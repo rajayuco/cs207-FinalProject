@@ -73,9 +73,9 @@ def test_log_types():
 
 ## Test logarithm function
 def test_log_result_single():
-    x = ad.autodiff('x', 5, 2)
+    x = ad.autodiff('x', 5)
     f = admath.log(x)
-    assert f.val == 1.6094379124341003 and f.der == {'x': 0.4}
+    assert f.val == 1.6094379124341003 and f.der == {'x': 0.2}
 
 ## Test logarithm function, any base
 def test_log_result_base():
@@ -88,6 +88,12 @@ def test_log_result_base():
 ## Test error for nonpositive logarithm attempt
 def test_log_error_nonpositive():
     x = ad.autodiff('x', -1)
+    with pytest.raises(ValueError):
+        admath.log(x)
+
+## Test error for nonpositive logarithm attempt for list values
+def test_log_error_nonpositive_listvals():
+    x = ad.autodiff('x', [1,0,2])
     with pytest.raises(ValueError):
         admath.log(x)
 
@@ -135,7 +141,7 @@ def test_logistic_types():
 ## Test logistic function
 def test_logistic_result_single():
     x = ad.autodiff('x', 10)
-    
+
     assert admath.logistic(admath.logistic(x)).val == 1.0/(1.0 + np.exp(-1*(1.0/(1 + np.exp(-10)))))
     assert admath.logistic(admath.logistic(x, A=-1, k=3.5, x0=-2), A=2, k=-1, x0=5).val == 2.0/(1.0 + np.exp(-1*-1*((-1.0/(1.0 + np.exp(-1*3.5*(10 - -2)))) - 5)))
 

@@ -6,7 +6,6 @@ from autodiffpy import autodiff_math as admath
 
 
 
-
 def test_eq():
     x = ad.autodiff('x', 10)
     y = ad.autodiff('y', 2)
@@ -204,3 +203,8 @@ def test_jacobian():
     y = ad.autodiff('y', 2)
     f1 = x*y
     assert f1.jacobian() == [['x', 'y'], [2, 10]]
+
+def test_backprop():
+    x = ad.autodiff('x', 3)
+    f = admath.sin(admath.cos(admath.tan(admath.log(x))))
+    assert f.backprop() == {'x': -1.3868663497018852}
