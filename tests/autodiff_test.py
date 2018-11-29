@@ -207,4 +207,4 @@ def test_jacobian():
 def test_backprop():
     x = ad.autodiff('x', 3)
     f = admath.sin(admath.cos(admath.tan(admath.log(x))))
-    assert f.backprop() == {'x': -1.3868663497018852}
+    assert f.backprop() == {'x': -1.386866349701885}
