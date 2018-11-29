@@ -1,14 +1,10 @@
 def test_backpropagation_arc():
     '''function for testing backpropagation'''
-    x1 = ad.autodiff(name="x1", val=0.5, der=1)
-    x2 = ad.autodiff(name="x2", val=0.5, der=1)
+    x1 = ad.autodiff(name="x1", val=[0.5, 0.5], der=1)
     w0 = ad.autodiff(name="w0", val=0.5, der=1)
-    w1 = ad.autodiff(name="w1", val=0.5, der=1)
-    w2 = ad.autodiff(name="w2", val=-0.5, der=1)
+    w1 = ad.autodiff(name="w1", val=[0.5, -0.5], der=1)
 
-    f = admath.arctan(w0) * (w1/admath.arcsin(x1) - w2/admath.arccos(x2))
-    assert abs(f.backprop()[0][2] - 1.4323944878270578) < 1E-10
-    assert abs(f.backprop()[1][2] - 0.8855017059025995) < 1E-10
-    assert abs(f.backprop()[2][2] - (-0.8455918416642267)) < 1E-10
-    assert abs(f.backprop()[3][2] - (-0.44275085295129973)) < 1E-10
-    assert abs(f.backprop()[4][2] - (-0.21139796041605668)) < 1E-10
+    f = admath.arctan(w0) * w1/admath.arcsin(x1)
+    assert sum(abs(f.backprop()[0][1] - [ 0.95492966, -0.95492966])) < 1E-6
+    assert sum(abs(f.backprop()[1][1] - [0.88550171, 0.88550171])) < 1E-6
+    assert sum(abs(f.backprop()[2][1] - [-0.84559184,  0.84559184])) < 1E-6  

@@ -269,7 +269,7 @@ def arccos(ad):
         anew = autodiff.autodiff(name=ad.name, val = np.arccos(ad.val), der = ad.der)
         for key in ad.der:
             anew.der[key] = -1/np.sqrt(1 - ad.val**2)*ad.der[key]
-        anew.back_partial_der = -1/np.sqrt(1 - ad.val**2)
+        anew.back_partial_der =  -1/np.sqrt(1 - ad.val**2)
         return anew
     except AttributeError:
         raise AttributeError("Error: input should be autodiff instance only.")

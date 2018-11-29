@@ -37,7 +37,7 @@ class autodiff():
             except:
                 pass
         if self.lparent is None and self.rparent is None:
-            backproplist.append((self.name,self.back_der))
+            backproplist.append((self.name, self.back_der))
 
         return backproplist
 
@@ -149,7 +149,7 @@ class autodiff():
                 anew.der[key] = -other*self.der[key]/(self.val**2)
                 anew.val = other/self.val
                 
-            self.back_partail_der = -other/(self.val**2)
+            self.back_partial_der = -other/(self.val**2)
             return anew
         else:
             raise ValueError("Error: Only integer, float, or autodiff instances can be divided.")
