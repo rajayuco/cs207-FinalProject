@@ -210,4 +210,4 @@ def test_backprop():
     x = ad.autodiff('x', 3)
     f = admath.sin(admath.cos(admath.tan(admath.log(x))))
     # f.backprop() = {'x': array([-1.38686635])}
-    assert f.backprop()['x'][0] == -1.3868663497018852
+    assert f.backprop()['x'][0] == -1.386866349701885
