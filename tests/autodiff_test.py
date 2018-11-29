@@ -1,10 +1,11 @@
 import pytest
 import sys
+import numpy as np
+
 sys.path.append('..')
 import numpy as np
 from autodiffpy import autodiff as ad
 from autodiffpy import autodiff_math as admath
-
 
 
 
@@ -232,3 +233,8 @@ def test_backprop_hyperbolic():
     assert f1.backprop()[1] == ('y', np.sinh(y.val), f1.back_der*np.tanh(z.val)*np.sinh(x.val)*np.sinh(y.val))
 
 
+def test_backprop_sincostanlog():
+    x = ad.autodiff('x', 3)
+    f = admath.sin(admath.cos(admath.tan(admath.log(x))))
+    # f.backprop() = {'x': array([-1.38686635])}
+    assert f.backprop()['x'][0] == -1.386866349701885
