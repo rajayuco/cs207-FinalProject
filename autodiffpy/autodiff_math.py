@@ -33,16 +33,20 @@ def sqrt(ad):
     3.4641016151377544 {'x': 0.5773502691896258, 'y': 0.4330127018922194}
     """
     try:
-        if ad.val<0:
-            raise ValueError('Error: cannot evaluate the square root of a negative number')
-
+        # Check that the domain of the square root is valid
+        if np.min(ad.val) < 0:
+            raise ValueError('Error: cannot evaluate the square root of a negative number(s).')
+        
+        # Create a new autodiff instance with forward result
         anew = autodiff.autodiff(name = ad.name, val = np.sqrt(ad.val), der = ad.der)
-        anew.lparent = ad
-        for key in ad.der:
+        for key in ad.der: # Calculate derivatives for each variable
             anew.der[key] = 1/(2*np.sqrt(ad.val))*ad.der[key]
-        ad.back_partial_der = anew.val
+        
+        # Update with the backpropagation derivatives
+        anew.lparent = ad
+        ad.back_partial_der = (1/2.0)*((ad.val)**(-1/2.0))
         return anew
-    except AttributeError:
+    except AttributeError: #If non-autodiff instance passed
         raise AttributeError("Error: input should be autodiff instance only.")
 
 
@@ -336,12 +340,16 @@ def sinh(ad):
     '''
 
     try:
+        # Create a new autodiff instance with forward result
         anew = autodiff.autodiff(name=ad.name, val = np.sinh(ad.val), der = ad.der)
         for key in ad.der:
             anew.der[key] = ad.der[key]*np.cosh(ad.val)
+        # Update with the backpropagation derivatives
+        anew.lparent = ad
+        ad.back_partial_der = np.cosh(ad.val)
 
         return anew
-    except AttributeError:
+    except AttributeError: #If non-autodiff instance passed
         raise AttributeError("Error: input should be autodiff instance only.")
 
 def cosh(ad):
@@ -369,12 +377,16 @@ def cosh(ad):
     '''
 
     try:
+        # Create a new autodiff instance with forward result
         anew = autodiff.autodiff(name=ad.name, val = np.cosh(ad.val), der = ad.der)
         for key in ad.der:
             anew.der[key] = ad.der[key]*np.sinh(ad.val)
+        # Update with the backpropagation derivatives
+        anew.lparent = ad
+        ad.back_partial_der = np.sinh(ad.val)
 
         return anew
-    except AttributeError:
+    except AttributeError: #If non-autodiff instance passed
         raise AttributeError("Error: input should be autodiff instance only.")
 
 def tanh(ad):
@@ -402,12 +414,16 @@ def tanh(ad):
     '''
 
     try:
+        # Create a new autodiff instance with forward result
         anew = autodiff.autodiff(name=ad.name, val = np.tanh(ad.val), der = ad.der)
         for key in ad.der:
             anew.der[key] = ad.der[key]*((1.0/np.cosh(ad.val))**2)
+        # Update with the backpropagation derivatives
+        anew.lparent = ad
+        ad.back_partial_der = ((1.0/np.cosh(ad.val))**2)
 
         return anew
-    except AttributeError:
+    except AttributeError: #If non-autodiff instance passed
         raise AttributeError("Error: input should be autodiff instance only.")
 
 def logistic(ad, A=1.0, k=1.0, x0=0.0):
@@ -439,12 +455,16 @@ def logistic(ad, A=1.0, k=1.0, x0=0.0):
     '''
 
     try:
+        # Create a new autodiff instance with forward result
         anew = autodiff.autodiff(name=ad.name, val = (A/1.0/(1.0 + np.exp(-1.0*k*(ad.val - x0)))), der = ad.der)
         for key in ad.der:
             anew.der[key] = (A*k*ad.der[key])*np.exp(-1.0*k*(ad.val - x0))/1.0/((np.exp(-1.0*k*(ad.val - x0)) + 1.0)**2)
+        # Update with the backpropagation derivatives
+        anew.lparent = ad
+        ad.back_partial_der = (A*k)*np.exp(-1.0*k*(ad.val - x0))/1.0/((np.exp(-1.0*k*(ad.val - x0)) + 1.0)**2)
 
         return anew
-    except AttributeError:
+    except AttributeError: #If non-autodiff instance passed
         raise AttributeError("Error: input should be autodiff instance only.")
     except TypeError:
         raise TypeError("Error: input attributes A, k, and x0 should be numbers.")
