@@ -4,7 +4,15 @@ import numpy as np
 class autodiff():
     def __init__(self,name,val,der=1):
         self.name = name
-        self.val = val
+
+        # set val attribute
+        if isinstance(val, np.ndarray):
+            self.val = val
+        elif isinstance(val, list):
+            self.val = np.asarray(val)
+        else:
+            self.val = np.asarray([val])
+
         self.der = {name:der}
 
         self.lparent = None
