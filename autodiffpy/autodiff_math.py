@@ -30,7 +30,7 @@ def sqrt(ad):
     >>> y = autodiff.autodiff('y', 4)
     >>> f1 = admath.sqrt(x*y)
     >>> print(f1.val, f1.der)
-    [3.46410162] {'x': [0.57735027], 'y': [0.4330127]}
+    [3.46410162] {'x': array([0.57735027]), 'y': array([0.4330127])}
     """
     try:
         # Check that the domain of the square root is valid
