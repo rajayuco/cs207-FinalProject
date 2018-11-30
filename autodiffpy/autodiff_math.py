@@ -165,7 +165,7 @@ def log(ad, base = np.e):
     >>> x = autodiff.autodiff('x', np.exp(2))
     >>> f1 = admath.log(x)
     >>> print(f1.val)
-    2.0
+    [2.0]
     >>> print(f1.der['x'])
     [0.1353352832366127]
     '''
