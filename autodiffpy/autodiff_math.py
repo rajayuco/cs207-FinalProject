@@ -30,7 +30,7 @@ def sqrt(ad):
     >>> y = autodiff.autodiff('y', 4)
     >>> f1 = admath.sqrt(x*y)
     >>> print(f1.val, f1.der)
-    [3.4641016151377544] {'x': [0.5773502691896258], 'y': [0.4330127018922194]}
+    [3.46410162] {'x': [0.57735027], 'y': [0.4330127]}
     """
     try:
         # Check that the domain of the square root is valid
@@ -69,7 +69,7 @@ def sin(ad):
     >>> x = autodiff.autodiff('x', 10)
     >>> f1 = admath.sin(x)
     >>> print(f1.val, f1.der)
-    [-0.5440211108893698] {'x': [-0.8390715290764524]}
+    [-0.54402111] {'x': [-0.83907153]}
     """
     try:
         anew = autodiff.autodiff(name=ad.name, val = np.sin(ad.val), der = ad.der)
@@ -101,7 +101,7 @@ def cos(ad):
     >>> x = autodiff.autodiff('x', 10)
     >>> f1 = admath.cos(x)
     >>> print(f1.val, f1.der)
-    [-0.8390715290764524] {'x': [0.5440211108893698]}
+    [-0.83907153] {'x': [0.54402111]}
     """
     try:
         anew = autodiff.autodiff(name=ad.name, val = np.cos(ad.val), der = ad.der)
@@ -132,7 +132,7 @@ def tan(ad):
     >>> x = autodiff.autodiff('x', 10)
     >>> f1 = admath.tan(x)
     >>> print(f1.val, f1.der)
-    [0.6483608274590866] {'x': [1.4203717625834316]}
+    [0.64836083] {'x': [1.42037176]}
     """
     try:
         anew = autodiff.autodiff(name=ad.name, val = np.tan(ad.val), der = ad.der)
@@ -167,7 +167,7 @@ def log(ad, base = np.e):
     >>> print(f1.val)
     [2.0]
     >>> print(f1.der['x'])
-    [0.1353352832366127]
+    [0.13533528]
     '''
     try:
         if isinstance(ad.val, list):
@@ -242,7 +242,7 @@ def arcsin(ad):
     >>> x = autodiff.autodiff('x', 0.1)
     >>> f1 = admath.arcsin(x)
     >>> print(f1.val, f1.der)
-    [0.1001674211615598] {'x': [1.005037815259212]}
+    [0.10016742] {'x': [1.00503782]}
     """
     try:
         if ad.val**2 > 1:
@@ -273,7 +273,7 @@ def arccos(ad):
     >>> x = autodiff.autodiff('x', 0.2)
     >>> f1 = admath.arccos(x)
     >>> print(f1.val, f1.der)
-    [1.369438406004566] {'x': [-1.0206207261596576]}
+    [1.36943841] {'x': [-1.02062073]}
     """
     try:
         if ad.val**2 > 1:
@@ -305,7 +305,7 @@ def arctan(ad):
     >>> x = autodiff.autodiff('x', 0.2)
     >>> f1 = admath.arctan(x)
     >>> print(f1.val, f1.der)
-    [0.19739555984988078] {'x': [0.9615384615384615]}
+    [0.19739556] {'x': [0.96153846]}
     """
     try:
         anew = autodiff.autodiff(name=ad.name, val = np.arctan(ad.val), der = ad.der)
