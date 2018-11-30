@@ -69,7 +69,7 @@ def sin(ad):
     >>> x = autodiff.autodiff('x', 10)
     >>> f1 = admath.sin(x)
     >>> print(f1.val, f1.der)
-    [-0.54402111] {'x': [-0.83907153]}
+    [-0.54402111] {'x': array([-0.83907153])}
     """
     try:
         anew = autodiff.autodiff(name=ad.name, val = np.sin(ad.val), der = ad.der)
@@ -101,7 +101,7 @@ def cos(ad):
     >>> x = autodiff.autodiff('x', 10)
     >>> f1 = admath.cos(x)
     >>> print(f1.val, f1.der)
-    [-0.83907153] {'x': [0.54402111]}
+    [-0.83907153] {'x': array([0.54402111])}
     """
     try:
         anew = autodiff.autodiff(name=ad.name, val = np.cos(ad.val), der = ad.der)
@@ -132,7 +132,7 @@ def tan(ad):
     >>> x = autodiff.autodiff('x', 10)
     >>> f1 = admath.tan(x)
     >>> print(f1.val, f1.der)
-    [0.64836083] {'x': [1.42037176]}
+    [0.64836083] {'x': array([1.42037176])}
     """
     try:
         anew = autodiff.autodiff(name=ad.name, val = np.tan(ad.val), der = ad.der)
@@ -165,7 +165,7 @@ def log(ad, base = np.e):
     >>> x = autodiff.autodiff('x', np.exp(2))
     >>> f1 = admath.log(x)
     >>> print(f1.val)
-    [2.0]
+    [2.]
     >>> print(f1.der['x'])
     [0.13533528]
     '''
@@ -207,9 +207,9 @@ def exp(ad):
     >>> x = autodiff.autodiff('x', 10)
     >>> f1 = admath.exp(x)
     >>> print(f1.val == [np.exp(10)])
-    [True]
+    [ True]
     >>> print(f1.der['x'] == [np.exp(10)])
-    [True]
+    [ True]
     '''
 
     try:
@@ -242,7 +242,7 @@ def arcsin(ad):
     >>> x = autodiff.autodiff('x', 0.1)
     >>> f1 = admath.arcsin(x)
     >>> print(f1.val, f1.der)
-    [0.10016742] {'x': [1.00503782]}
+    [0.10016742] {'x': array([1.00503782])}
     """
     try:
         if ad.val**2 > 1:
@@ -273,7 +273,7 @@ def arccos(ad):
     >>> x = autodiff.autodiff('x', 0.2)
     >>> f1 = admath.arccos(x)
     >>> print(f1.val, f1.der)
-    [1.36943841] {'x': [-1.02062073]}
+    [1.36943841] {'x': array([-1.02062073])}
     """
     try:
         if ad.val**2 > 1:
@@ -305,7 +305,7 @@ def arctan(ad):
     >>> x = autodiff.autodiff('x', 0.2)
     >>> f1 = admath.arctan(x)
     >>> print(f1.val, f1.der)
-    [0.19739556] {'x': [0.96153846]}
+    [0.19739556] {'x': array([0.96153846])}
     """
     try:
         anew = autodiff.autodiff(name=ad.name, val = np.arctan(ad.val), der = ad.der)
@@ -334,9 +334,9 @@ def sinh(ad):
     >>> x = autodiff.autodiff('x', 5)
     >>> f1 = admath.sinh(x)
     >>> print(f1.val == [np.sinh(5)])
-    [True]
+    [ True]
     >>> print(f1.der['x'] == [np.cosh(5)])
-    [True]
+    [ True]
     '''
 
     try:
@@ -371,9 +371,9 @@ def cosh(ad):
     >>> x = autodiff.autodiff('x', 5)
     >>> f1 = admath.cosh(x)
     >>> print(f1.val == [np.cosh(5)])
-    [True]
+    [ True]
     >>> print(f1.der['x'] == [np.sinh(5)])
-    [True]
+    [ True]
     '''
 
     try:
@@ -408,9 +408,9 @@ def tanh(ad):
     >>> x = autodiff.autodiff('x', 5)
     >>> f1 = admath.tanh(x)
     >>> print(f1.val == [np.tanh(5)])
-    [True]
+    [ True]
     >>> print(f1.der['x'] == [(1.0/np.cosh(5))**2])
-    [True]
+    [ True]
     '''
 
     try:
@@ -449,9 +449,9 @@ def logistic(ad, A=1.0, k=1.0, x0=0.0):
     >>> f1 = admath.logistic(x, A=3, k=4, x0=7)
     >>> testresult = 3.0/(1 + np.exp(-4*(5-7)))
     >>> print(f1.val == [testresult])
-    [True]
+    [ True]
     >>> print(f1.der['x'] == [12*np.exp(-4*(5 - 7))/1.0/((np.exp(-4*(5 - 7)) + 1)**2)])
-    [True]
+    [ True]
     '''
 
     try:
