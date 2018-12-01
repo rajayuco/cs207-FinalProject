@@ -4,25 +4,33 @@ import numpy as np
 class autodiff():
     def __init__(self,name,val,der=1):
         self.name = name
+<<<<<<< HEAD
           # set val attribute
+=======
+        # set val attribute
+>>>>>>> 33724f0b8e53f150b54b9306bef1131d93af7756
         if isinstance(val, np.ndarray):
             self.val = val
         elif isinstance(val, list):
             self.val = np.asarray(val)
         else:
             self.val = np.asarray([val])
+<<<<<<< HEAD
             
+=======
+
+>>>>>>> 33724f0b8e53f150b54b9306bef1131d93af7756
         self.der = {name:der}
 
         self.lparent = None
         self.rparent = None
         self.back_der = None
         self.back_partial_der = None
-        # self.func = None
 
     def backprop(self, backproplist = None):
         if backproplist == None:
-            backproplist = []
+            backproplist = {}
+            # self.back_der = np.ones(len(self.val))
             self.back_der = 1
         if self.lparent:
             try:
@@ -37,7 +45,11 @@ class autodiff():
             except:
                 pass
         if self.lparent is None and self.rparent is None:
+<<<<<<< HEAD
             backproplist.append((self.name, self.back_der))
+=======
+            backproplist[self.name] = self.back_der
+>>>>>>> 33724f0b8e53f150b54b9306bef1131d93af7756
 
         return backproplist
 
@@ -326,10 +338,29 @@ class autodiff():
         #Return new autodiff instance
         return anew
 
-    def jacobian(self):
-        jacobian = [[],[]]
-        for key in self.der:
-            jacobian[0].append(key)
-            jacobian[1].append(self.der[key])
+    def jacobian(self, order=None):
+        if order is not None: # If specific ordering requested
+            order = list(order)
+            jacobian = [None]*len(order)
+            ii = 0 # For indexing through jacobian
+            try:
+                for key in order:
+                    jacobian[ii] = self.der[key]
+                    ii = ii + 1
+            except KeyError:
+                raise KeyError("Error: variable(s) in order have not been encountered by this autodiff instance.")
+        
+        else: # If no specific ordering given
+            jacobian = [None]*len(self.der)
+            order = [None]*len(self.der) # To hold ordering
+            ii = 0 # For indexing through jacobian
+            for key in self.der:
+                order[ii] = key
+                jacobian[ii] = self.der[key]
+                ii = ii + 1
+       
+        # Cast the output as an array
+        jacobian = np.asarray(jacobian)
+        # Return jacobian and its ordering
+        return {"jacobian":jacobian, "order":order}
 
-        return jacobian
