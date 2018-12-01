@@ -195,3 +195,14 @@ def test_arctan_value():
 def test_arctan_types():
     with pytest.raises(AttributeError):
         admath.arctan(12.1)
+        
+def test_backpropagation_arc():
+    '''function for testing backpropagation'''
+    x1 = ad.autodiff(name="x1", val=[0.5, 0.5], der=1)
+    w0 = ad.autodiff(name="w0", val=0.5, der=1)
+    w1 = ad.autodiff(name="w1", val=[0.5, -0.5], der=1)
+
+    f = admath.arctan(w0) * w1/admath.arcsin(x1)
+    assert sum(abs(f.backprop()[0][1] - [ 0.95492966, -0.95492966])) < 1E-6
+    assert sum(abs(f.backprop()[1][1] - [0.88550171, 0.88550171])) < 1E-6
+    assert sum(abs(f.backprop()[2][1] - [-0.84559184,  0.84559184])) < 1E-6  
