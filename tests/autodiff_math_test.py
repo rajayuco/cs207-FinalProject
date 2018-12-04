@@ -82,18 +82,12 @@ def test_log_result_base():
     x = ad.autodiff('x', 16)
     y = ad.autodiff('y', 2)
     f1 = admath.log(x*y, 2)
-    assert f1.val == 5.0 and f1.der == {'x': 1/(16*math.log(2, math.e)), 'y': 1/(2*math.log(2, math.e))}
+    assert f1.val == 5.0 and f1.der == {'x': 1/(16*np.log(2)), 'y': 1/(2*np.log(2))}
 
 
 ## Test error for nonpositive logarithm attempt
 def test_log_error_nonpositive():
     x = ad.autodiff('x', -1)
-    with pytest.raises(ValueError):
-        admath.log(x)
-
-## Test error for nonpositive logarithm attempt for list values
-def test_log_error_nonpositive_listvals():
-    x = ad.autodiff('x', [1,0,2])
     with pytest.raises(ValueError):
         admath.log(x)
 

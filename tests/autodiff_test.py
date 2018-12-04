@@ -211,14 +211,14 @@ def test_jacobian():
     assert np.sum(f1.jacobian()["jacobian"] == np.array([2, 10])) == 2
     assert f1.jacobian(order=['y','x'])["order"] == ['y', 'x']
     assert np.sum(f1.jacobian(order=['y','x'])["jacobian"] == np.array([10, 2])) == 2
-    
+
     a = ad.autodiff('a', [1, 2, 3])
     b = ad.autodiff('b', [-1, -2, -3])
     c = ad.autodiff('c', [-2, 5, 10])
     f2 = a*b - c
     assert f2.jacobian(order=['a', 'b'])["order"] == ['a', 'b']
     assert np.sum(f2.jacobian(order=['a', 'b'])["jacobian"] == np.array([[-1, -2, -3], [1, 2, 3]])) == 6
-    
+
     with pytest.raises(KeyError):
         assert f2.jacobian(order=['a', 'd'])
 
@@ -228,7 +228,7 @@ def test_backprop_hyperbolic():
     y = ad.autodiff('y', 2)
     z = ad.autodiff('z', 3)
     f1 = admath.sinh(x)*admath.cosh(y)*admath.tanh(z)
-    
+
     assert f1.backprop()[0] == ('x', np.cosh(x.val), f1.back_der*np.tanh(z.val)*np.cosh(y.val)*np.cosh(x.val))
     assert f1.backprop()[1] == ('y', np.sinh(y.val), f1.back_der*np.tanh(z.val)*np.sinh(x.val)*np.sinh(y.val))
 
@@ -237,4 +237,4 @@ def test_backprop_sincostanlog():
     x = ad.autodiff('x', 3)
     f = admath.sin(admath.cos(admath.tan(admath.log(x))))
     # f.backprop() = {'x': array([-1.38686635])}
-    assert f.backprop()['x'][0] == -1.386866349701885
+    assert f.backprop()['x'][0] == -1.3868663497018852

@@ -36,12 +36,12 @@ def sqrt(ad):
         # Check that the domain of the square root is valid
         if np.min(ad.val) < 0:
             raise ValueError('Error: cannot evaluate the square root of a negative number(s).')
-        
+
         # Create a new autodiff instance with forward result
         anew = autodiff.autodiff(name = ad.name, val = np.sqrt(ad.val), der = ad.der)
         for key in ad.der: # Calculate derivatives for each variable
             anew.der[key] = 1/(2*np.sqrt(ad.val))*ad.der[key]
-        
+
         # Update with the backpropagation derivatives
         anew.lparent = ad
         ad.back_partial_der = (1/2.0)*((ad.val)**(-1/2.0))
@@ -170,19 +170,14 @@ def log(ad, base = np.e):
     0.1353352832366127
     '''
     try:
-        if isinstance(ad.val, list):
-            for val in ad.val:
-                if val <= 0:
-                    raise ValueError('Error: cannot evaluate the log of a nonpositive number.')
-
-        elif ad.val<=0:
-                raise ValueError('Error: cannot evaluate the log of a nonpositive number.')
+        if np.min(ad.val) <= 0:
+            raise ValueError('Error: cannot evaluate the log of a nonpositive number.')
 
         anew = autodiff.autodiff(name = ad.name, val = np.log(ad.val)/np.log(base), der = ad.der)
         anew.lparent = ad
         for key in ad.der:
-            anew.der[key] = ad.der[key]/(ad.val*(np.log(base)/np.log(np.e)))
-        ad.back_partial_der = 1/(ad.val*(np.log(base)/np.log(np.e)))
+            anew.der[key] = ad.der[key]/(ad.val*(np.log(base)))
+        ad.back_partial_der = 1/(ad.val*(np.log(base)))
         return anew
     except AttributeError:
         raise AttributeError("Error: input should be autodiff instance only.")

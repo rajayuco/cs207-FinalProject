@@ -19,6 +19,11 @@ class autodiff():
         self.back_der = None
         self.back_partial_der = None
 
+
+    def __str__(self):
+        return f"value: {self.val}\nderivatives:{self.der}"
+
+    # function for back-propagation
     def backprop(self, backproplist = None):
         if backproplist == None:
             backproplist = {}
@@ -301,6 +306,8 @@ class autodiff():
         #Return new autodiff instance
         return anew
 
+
+    # function for returning jacobian matrix values
     def jacobian(self, order=None):
         if order is not None: # If specific ordering requested
             order = list(order)
@@ -312,7 +319,7 @@ class autodiff():
                     ii = ii + 1
             except KeyError:
                 raise KeyError("Error: variable(s) in order have not been encountered by this autodiff instance.")
-        
+
         else: # If no specific ordering given
             jacobian = [None]*len(self.der)
             order = [None]*len(self.der) # To hold ordering
@@ -321,9 +328,8 @@ class autodiff():
                 order[ii] = key
                 jacobian[ii] = self.der[key]
                 ii = ii + 1
-       
+
         # Cast the output as an array
         jacobian = np.asarray(jacobian)
         # Return jacobian and its ordering
         return {"jacobian":jacobian, "order":order}
-
