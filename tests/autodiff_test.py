@@ -229,12 +229,12 @@ def test_backprop_hyperbolic():
     z = ad.autodiff('z', 3)
     f1 = admath.sinh(x)*admath.cosh(y)*admath.tanh(z)
 
-    assert f1.backprop()[0] == ('x', np.cosh(x.val), f1.back_der*np.tanh(z.val)*np.cosh(y.val)*np.cosh(x.val))
-    assert f1.backprop()[1] == ('y', np.sinh(y.val), f1.back_der*np.tanh(z.val)*np.sinh(x.val)*np.sinh(y.val))
+    assert pytest.approx(f1.backprop()['x'][0]) == f1.back_der*np.tanh(z.val)*np.cosh(y.val)*np.cosh(x.val)
+    assert pytest.approx(f1.backprop()['y'][0]) == f1.back_der*np.tanh(z.val)*np.sinh(x.val)*np.sinh(y.val)
 
 
 def test_backprop_sincostanlog():
     x = ad.autodiff('x', 3)
     f = admath.sin(admath.cos(admath.tan(admath.log(x))))
     # f.backprop() = {'x': array([-1.38686635])}
-    assert f.backprop()['x'][0] == -1.386866349701885
+    assert pytest.approx(f.backprop()['x'][0]) == -1.386866349701885
