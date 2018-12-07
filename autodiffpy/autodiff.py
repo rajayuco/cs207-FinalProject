@@ -144,9 +144,14 @@ class autodiff():
 
         if isinstance(other, (int,float)):
             anew = autodiff(self.name, self.val, self.der)
+            anew.lparent = self
+            anew.rparent = other
+        
             for key in self.der:
-                anew.der[key] = -other*self.der[key]/self.val**2
+                anew.der[key] = -other*self.der[key]/(self.val**2)
                 anew.val = other/self.val
+                
+            self.back_partial_der = -other/(self.val**2)
             return anew
         else:
             raise ValueError("Error: Only integer, float, or autodiff instances can be divided.")
