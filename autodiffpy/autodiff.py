@@ -221,7 +221,9 @@ class autodiff():
 
         #Generate a new autodiff instance copy of self
         anew = autodiff(self.name, self.val, self.der)
-
+        anew.lparent = self
+        anew.rparent = other
+        
         #Tries subtracting two autodiff instances together
         try:
             #Subtract values
@@ -240,7 +242,9 @@ class autodiff():
                 #Else, if both self and opponent have encountered this variable before
                 else:
                     anew.der[key] = self.der[key] - other.der[key]
-
+                    
+            self.back_partial_der = 1
+            other.back_partial_der = -1
         #Otherwise, if not two autodiff instances:
         except AttributeError:
             #Tries subtracting number from autodiff instance
@@ -248,7 +252,8 @@ class autodiff():
             for key in self.der:
                 anew.der[key] = self.der[key]
                 anew.val = self.val - other
-
+                
+            self.back_partial_der = 1
         #Returns new autodiff instance
         return anew
 
