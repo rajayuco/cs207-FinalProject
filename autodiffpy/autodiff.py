@@ -110,19 +110,31 @@ class autodiff():
             raise ValueError("Error: Only integer, float, or autodiff instances can be divided.")
 
         anew = autodiff(self.name, self.val, self.der)
+        
+        anew.lparent = self
+        anew.rparent = other
+        
         try:
             anew.val = self.val/other.val
+            anew.back_partial_der = 1/other.val
+        
             for key in np.unique([key for key in self.der] + [key for key in other.der]):
                 if key not in self.der:
-                    anew.der[key]=self.val*other.der[key]/other.val**2
+                    anew.der[key]= -self.val*other.der[key]/(other.val**2)
                 elif key not in other.der:
                     anew.der[key]=self.der[key]/other.val
                 else:
                     anew.der[key]=0
+                    
+            self.back_partial_der = 1/other.val
+            other.back_partial_der = -self.val/(other.val**2)
+            
         except AttributeError:
             for key in self.der:
                 anew.der[key] = self.der[key]/other
                 anew.val = self.val/other
+                anew.back_partial_der = 1/other
+                
         return anew
 
 
