@@ -308,10 +308,12 @@ def arctan(ad):
         anew = autodiff.autodiff(name=ad.name, val = np.arctan(ad.val), der = ad.der)
         for key in ad.der:
             anew.der[key] = 1/(1+ad.val**2)*ad.der[key]
+        anew.back_partial_der = 1/(1+ad.val**2)
         return anew
     except AttributeError:
         raise AttributeError("Error: input should be autodiff instance only.")
-
+        
+        
 def sinh(ad):
     '''Returns autodiff instance of sinh(x)
 
