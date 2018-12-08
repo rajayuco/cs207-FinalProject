@@ -240,7 +240,7 @@ def arcsin(ad):
     [0.10016742] {'x': array([1.00503782])}
     """
     try:
-        if list(map(lambda x:x**2>1, ad.val)) == True:
+        if np.sum(list(map(lambda x:x**2>1, ad.val))) == True:
             raise ValueError('Error: invalid value encountered while calculating derivatives.')
         anew = autodiff.autodiff(name=ad.name, val = np.arcsin(ad.val), der = ad.der)
         for key in ad.der:
@@ -269,10 +269,10 @@ def arccos(ad):
     >>> x = autodiff.autodiff('x', 0.2)
     >>> f1 = admath.arccos(x)
     >>> print(f1.val, f1.der)
-    1.369438406004566 {'x': -1.0206207261596576}
+    [1.36943841] {'x': array([-1.02062073])}
     """
     try:
-        if list(map(lambda x:x**2>1, ad.val)) == True: #ad.val**2 > 1 or 
+        if np.sum(list(map(lambda x:x**2>1, ad.val))) == True: #ad.val**2 > 1 or 
             raise ValueError('Error: invalid value encountered while calculating derivatives.')
         anew = autodiff.autodiff(name=ad.name, val = np.arccos(ad.val), der = ad.der)
         for key in ad.der:
