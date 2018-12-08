@@ -237,7 +237,7 @@ def arcsin(ad):
     >>> x = autodiff.autodiff('x', 0.1)
     >>> f1 = admath.arcsin(x)
     >>> print(f1.val, f1.der)
-    0.1001674211615598 {'x': 1.005037815259212}
+    [0.10016742] {'x': array([1.00503782])}
     """
     try:
         if list(map(lambda x:x**2>1, ad.val)) == True:
