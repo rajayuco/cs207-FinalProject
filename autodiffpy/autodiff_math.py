@@ -240,11 +240,12 @@ def arcsin(ad):
     [0.10016742] {'x': array([1.00503782])}
     """
     try:
-        if ad.val**2 > 1:
+        if np.sum(list(map(lambda x:x**2>1, ad.val))) == True:
             raise ValueError('Error: invalid value encountered while calculating derivatives.')
         anew = autodiff.autodiff(name=ad.name, val = np.arcsin(ad.val), der = ad.der)
         for key in ad.der:
             anew.der[key] = 1/np.sqrt(1 - ad.val**2)*ad.der[key]
+        anew.back_partial_der = 1/np.sqrt(1 - ad.val**2)
         return anew
     except AttributeError:
         raise AttributeError("Error: input should be autodiff instance only.")
@@ -271,11 +272,12 @@ def arccos(ad):
     [1.36943841] {'x': array([-1.02062073])}
     """
     try:
-        if ad.val**2 > 1:
+        if np.sum(list(map(lambda x:x**2>1, ad.val))) == True: #ad.val**2 > 1 or 
             raise ValueError('Error: invalid value encountered while calculating derivatives.')
         anew = autodiff.autodiff(name=ad.name, val = np.arccos(ad.val), der = ad.der)
         for key in ad.der:
             anew.der[key] = -1/np.sqrt(1 - ad.val**2)*ad.der[key]
+        anew.back_partial_der =  -1/np.sqrt(1 - ad.val**2)
         return anew
     except AttributeError:
         raise AttributeError("Error: input should be autodiff instance only.")
@@ -306,10 +308,12 @@ def arctan(ad):
         anew = autodiff.autodiff(name=ad.name, val = np.arctan(ad.val), der = ad.der)
         for key in ad.der:
             anew.der[key] = 1/(1+ad.val**2)*ad.der[key]
+        anew.back_partial_der = 1/(1+ad.val**2)
         return anew
     except AttributeError:
         raise AttributeError("Error: input should be autodiff instance only.")
-
+        
+        
 def sinh(ad):
     '''Returns autodiff instance of sinh(x)
 
