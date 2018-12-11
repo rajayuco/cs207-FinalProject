@@ -2,11 +2,11 @@
 import numpy as np
 import sys
 sys.path.append('..')
+
 try:
     import autodiff
 except:
     from autodiffpy import autodiff
-
 
 
 
@@ -39,11 +39,17 @@ def sqrt(ad):
 
         # Create a new autodiff instance with forward result
         anew = autodiff.autodiff(name = ad.name, val = np.sqrt(ad.val), der = ad.der)
-        for key in ad.der: # Calculate derivatives for each variable
-            anew.der[key] = 1/(2*np.sqrt(ad.val))*ad.der[key]
+
+        for key in ad.der:
+            if ad.der[key].shape == (1/(2*np.sqrt(ad.val))).shape:
+                anew.der[key] = 1/(2*np.sqrt(ad.val))*ad.der[key]
+            else:
+                anew.der[key] = np.dot(1/(2*np.sqrt(ad.val)), ad.der[key])
+
 
         # Update with the backpropagation derivatives
         anew.lparent = ad
+        anew.function = sqrt
         ad.back_partial_der = (1/2.0)*((ad.val)**(-1/2.0))
         return anew
     except AttributeError: #If non-autodiff instance passed
@@ -74,8 +80,14 @@ def sin(ad):
     try:
         anew = autodiff.autodiff(name=ad.name, val = np.sin(ad.val), der = ad.der)
         anew.lparent = ad
+        anew.function = sin
+
         for key in ad.der:
-            anew.der[key] = np.cos(ad.val)*ad.der[key]
+            if ad.der[key].shape == np.cos(ad.val).shape:
+                anew.der[key] = ad.der[key]*np.cos(ad.val)
+            else:
+                anew.der[key] = np.dot(np.cos(ad.val), ad.der[key])
+
         ad.back_partial_der = np.cos(ad.val)
         return anew
     except AttributeError:
@@ -101,14 +113,19 @@ def cos(ad):
     >>> x = autodiff.autodiff('x', 10)
     >>> f1 = admath.cos(x)
     >>> print(f1.val, f1.der)
-    [-0.83907153] {'x': array([0.54402111])}
+    [-0.83907153] {'x': 0.5440211108893698}
     """
     try:
         anew = autodiff.autodiff(name=ad.name, val = np.cos(ad.val), der = ad.der)
         anew.lparent = ad
+        anew.function = cos
+
         for key in ad.der:
-            anew.der[key] = -np.sin(ad.val)*ad.der[key]
-        ad.back_partial_der = -np.sin(ad.val)
+            if ad.der[key].shape == -1*np.sin(ad.val).shape:
+                anew.der[key] = ad.der[key]*-1*np.sin(ad.val)
+            else:
+                anew.der[key] = np.dot(-1*np.sin(ad.val), ad.der[key])
+        ad.back_partial_der = -1*np.sin(ad.val)
         return anew
     except AttributeError:
         raise AttributeError("Error: input should be autodiff instance only.")
@@ -137,8 +154,14 @@ def tan(ad):
     try:
         anew = autodiff.autodiff(name=ad.name, val = np.tan(ad.val), der = ad.der)
         anew.lparent = ad
+        anew.function = tan
+
         for key in ad.der:
-            anew.der[key] = 1/(np.cos(ad.val))**2*ad.der[key]
+            if ad.der[key].shape == (1/(np.cos(ad.val))**2).shape:
+                anew.der[key] = 1/(np.cos(ad.val))**2*ad.der[key]
+            else:
+                anew.der[key] = np.dot(1/(np.cos(ad.val))**2, ad.der[key])
+
         ad.back_partial_der = 1/(np.cos(ad.val))**2
         return anew
     except AttributeError:
@@ -175,8 +198,15 @@ def log(ad, base = np.e):
 
         anew = autodiff.autodiff(name = ad.name, val = np.log(ad.val)/np.log(base), der = ad.der)
         anew.lparent = ad
+        anew.function = log
+
+
         for key in ad.der:
-            anew.der[key] = ad.der[key]/(ad.val*(np.log(base)))
+            if ad.der[key].shape == (ad.val*(np.log(base))).shape:
+                anew.der[key] = ad.der[key]/(ad.val*(np.log(base)))
+            else:
+                anew.der[key] = np.dot(1/(ad.val*(np.log(base))), ad.der[key])
+
         ad.back_partial_der = 1/(ad.val*(np.log(base)))
         return anew
     except AttributeError:
@@ -210,8 +240,12 @@ def exp(ad):
     try:
         anew = autodiff.autodiff(name=ad.name, val = np.exp(ad.val), der = ad.der)
         anew.lparent = ad
+        anew.function = exp
         for key in ad.der:
-            anew.der[key] = ad.der[key]*anew.val
+            if ad.der[key].shape == anew.val.shape:
+                anew.der[key] = ad.der[key]*anew.val
+            else:
+                anew.der[key] = np.dot(anew.val, ad.der[key])
         ad.back_partial_der = anew.val
         return anew
     except AttributeError:
@@ -240,12 +274,21 @@ def arcsin(ad):
     [0.10016742] {'x': array([1.00503782])}
     """
     try:
-        if np.sum(list(map(lambda x:x**2>1, ad.val))) == True:
+
+        if min(ad.val**2) > 1:
+
             raise ValueError('Error: invalid value encountered while calculating derivatives.')
         anew = autodiff.autodiff(name=ad.name, val = np.arcsin(ad.val), der = ad.der)
+        anew.function = arcsin
+        anew.lparent = ad
+
         for key in ad.der:
-            anew.der[key] = 1/np.sqrt(1 - ad.val**2)*ad.der[key]
-        anew.back_partial_der = 1/np.sqrt(1 - ad.val**2)
+
+            if ad.der[key].shape == (1/np.sqrt(1 - ad.val**2)).shape:
+                anew.der[key] = 1/np.sqrt(1 - ad.val**2)*ad.der[key]
+            else:
+                anew.der[key] = np.dot(1/np.sqrt(1 - ad.val**2), ad.der[key])
+
         return anew
     except AttributeError:
         raise AttributeError("Error: input should be autodiff instance only.")
@@ -272,12 +315,21 @@ def arccos(ad):
     [1.36943841] {'x': array([-1.02062073])}
     """
     try:
-        if np.sum(list(map(lambda x:x**2>1, ad.val))) == True: #ad.val**2 > 1 or 
+        if min(ad.val**2) > 1:
+
             raise ValueError('Error: invalid value encountered while calculating derivatives.')
         anew = autodiff.autodiff(name=ad.name, val = np.arccos(ad.val), der = ad.der)
+        anew.lparent = ad
+        anew.function = arccos
+
         for key in ad.der:
-            anew.der[key] = -1/np.sqrt(1 - ad.val**2)*ad.der[key]
-        anew.back_partial_der =  -1/np.sqrt(1 - ad.val**2)
+
+            if ad.der[key].shape == (-1/np.sqrt(1 - ad.val**2)).shape:
+                anew.der[key] = -1/np.sqrt(1 - ad.val**2)*ad.der[key]
+            else:
+                anew.der[key] = np.dot(-1/np.sqrt(1 - ad.val**2), ad.der[key])
+
+
         return anew
     except AttributeError:
         raise AttributeError("Error: input should be autodiff instance only.")
@@ -306,14 +358,21 @@ def arctan(ad):
     """
     try:
         anew = autodiff.autodiff(name=ad.name, val = np.arctan(ad.val), der = ad.der)
+        anew.function = arctan
+        anew.lparent = ad
+
         for key in ad.der:
-            anew.der[key] = 1/(1+ad.val**2)*ad.der[key]
-        anew.back_partial_der = 1/(1+ad.val**2)
+
+            if ad.der[key].shape == (1/(1+ad.val**2)).shape:
+                anew.der[key] = 1/(1+ad.val**2)*ad.der[key]
+            else:
+                anew.der[key] = np.dot(1/(1+ad.val**2), ad.der[key])
+
         return anew
     except AttributeError:
         raise AttributeError("Error: input should be autodiff instance only.")
-        
-        
+
+
 def sinh(ad):
     '''Returns autodiff instance of sinh(x)
 
@@ -341,10 +400,17 @@ def sinh(ad):
     try:
         # Create a new autodiff instance with forward result
         anew = autodiff.autodiff(name=ad.name, val = np.sinh(ad.val), der = ad.der)
-        for key in ad.der:
-            anew.der[key] = ad.der[key]*np.cosh(ad.val)
-        # Update with the backpropagation derivatives
+        anew.function = sinh
         anew.lparent = ad
+
+
+        for key in ad.der:
+            if ad.der[key].shape == np.cosh(ad.val).shape:
+                anew.der[key] = ad.der[key]*np.cosh(ad.val)
+            else:
+                anew.der[key] = np.dot(np.cosh(ad.val), ad.der[key])
+
+        # Update with the backpropagation derivatives
         ad.back_partial_der = np.cosh(ad.val)
 
         return anew
@@ -378,10 +444,17 @@ def cosh(ad):
     try:
         # Create a new autodiff instance with forward result
         anew = autodiff.autodiff(name=ad.name, val = np.cosh(ad.val), der = ad.der)
-        for key in ad.der:
-            anew.der[key] = ad.der[key]*np.sinh(ad.val)
-        # Update with the backpropagation derivatives
+        anew.function = cosh
         anew.lparent = ad
+
+        for key in ad.der:
+            if ad.der[key].shape == np.sinh(ad.val).shape:
+                anew.der[key] = ad.der[key]*np.sinh(ad.val)
+            else:
+                anew.der[key] = np.dot(np.sinh(ad.val), ad.der[key])
+
+        # Update with the backpropagation derivatives
+
         ad.back_partial_der = np.sinh(ad.val)
 
         return anew
@@ -415,10 +488,19 @@ def tanh(ad):
     try:
         # Create a new autodiff instance with forward result
         anew = autodiff.autodiff(name=ad.name, val = np.tanh(ad.val), der = ad.der)
-        for key in ad.der:
-            anew.der[key] = ad.der[key]*((1.0/np.cosh(ad.val))**2)
-        # Update with the backpropagation derivatives
+        anew.function = tanh
         anew.lparent = ad
+
+
+        for key in ad.der:
+            if ad.der[key].shape == ((1.0/np.cosh(ad.val))**2).shape:
+                anew.der[key] = ad.der[key]*((1.0/np.cosh(ad.val))**2)
+            else:
+                anew.der[key] = np.dot(((1.0/np.cosh(ad.val))**2), ad.der[key])
+
+
+        # Update with the backpropagation derivatives
+
         ad.back_partial_der = ((1.0/np.cosh(ad.val))**2)
 
         return anew
@@ -456,10 +538,18 @@ def logistic(ad, A=1.0, k=1.0, x0=0.0):
     try:
         # Create a new autodiff instance with forward result
         anew = autodiff.autodiff(name=ad.name, val = (A/1.0/(1.0 + np.exp(-1.0*k*(ad.val - x0)))), der = ad.der)
-        for key in ad.der:
-            anew.der[key] = (A*k*ad.der[key])*np.exp(-1.0*k*(ad.val - x0))/1.0/((np.exp(-1.0*k*(ad.val - x0)) + 1.0)**2)
-        # Update with the backpropagation derivatives
+        anew.function = logistic
         anew.lparent = ad
+
+
+        for key in ad.der:
+            if ad.der[key].shape == (A*k*np.exp(-1.0*k*(ad.val - x0))/1.0/((np.exp(-1.0*k*(ad.val - x0)) + 1.0)**2)).shape:
+                anew.der[key] = ad.der[key]*A*k*np.exp(-1.0*k*(ad.val - x0))/1.0/((np.exp(-1.0*k*(ad.val - x0)) + 1.0)**2)
+            else:
+                anew.der[key] = np.dot(A*k*np.exp(-1.0*k*(ad.val - x0))/1.0/((np.exp(-1.0*k*(ad.val - x0)) + 1.0)**2), ad.der[key])
+
+
+        # Update with the backpropagation derivatives
         ad.back_partial_der = (A*k)*np.exp(-1.0*k*(ad.val - x0))/1.0/((np.exp(-1.0*k*(ad.val - x0)) + 1.0)**2)
 
         return anew
