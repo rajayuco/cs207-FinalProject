@@ -289,6 +289,7 @@ def arcsin(ad):
             else:
                 anew.der[key] = np.dot(1/np.sqrt(1 - ad.val**2), ad.der[key])
 
+        ad.back_partial_der = 1/np.sqrt(1 - ad.val**2)
         return anew
     except AttributeError:
         raise AttributeError("Error: input should be autodiff instance only.")
@@ -329,7 +330,7 @@ def arccos(ad):
             else:
                 anew.der[key] = np.dot(-1/np.sqrt(1 - ad.val**2), ad.der[key])
 
-
+        ad.back_partial_der = -1/np.sqrt(1 - ad.val**2)
         return anew
     except AttributeError:
         raise AttributeError("Error: input should be autodiff instance only.")
@@ -368,6 +369,7 @@ def arctan(ad):
             else:
                 anew.der[key] = np.dot(1/(1+ad.val**2), ad.der[key])
 
+        ad.back_partial_der = 1/(1+ad.val**2)
         return anew
     except AttributeError:
         raise AttributeError("Error: input should be autodiff instance only.")
