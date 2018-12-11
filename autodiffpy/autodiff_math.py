@@ -274,18 +274,27 @@ def arcsin(ad):
     [0.10016742] {'x': array([1.00503782])}
     """
     try:
+<<<<<<< HEAD
         if min(ad.val**2) > 1:
+=======
+        if np.sum(list(map(lambda x:x**2>1, ad.val))) == True:
+>>>>>>> 69c1bc8c48358ce5e0b61fcd46008931850e31c7
             raise ValueError('Error: invalid value encountered while calculating derivatives.')
         anew = autodiff.autodiff(name=ad.name, val = np.arcsin(ad.val), der = ad.der)
         anew.function = arcsin
         anew.lparent = ad
 
         for key in ad.der:
+<<<<<<< HEAD
             if ad.der[key].shape == (1/np.sqrt(1 - ad.val**2)).shape:
                 anew.der[key] = 1/np.sqrt(1 - ad.val**2)*ad.der[key]
             else:
                 anew.der[key] = np.dot(1/np.sqrt(1 - ad.val**2), ad.der[key])
 
+=======
+            anew.der[key] = 1/np.sqrt(1 - ad.val**2)*ad.der[key]
+        anew.back_partial_der = 1/np.sqrt(1 - ad.val**2)
+>>>>>>> 69c1bc8c48358ce5e0b61fcd46008931850e31c7
         return anew
     except AttributeError:
         raise AttributeError("Error: input should be autodiff instance only.")
@@ -312,18 +321,27 @@ def arccos(ad):
     [1.36943841] {'x': array([-1.02062073])}
     """
     try:
+<<<<<<< HEAD
         if min(ad.val**2) > 1:
+=======
+        if np.sum(list(map(lambda x:x**2>1, ad.val))) == True: #ad.val**2 > 1 or 
+>>>>>>> 69c1bc8c48358ce5e0b61fcd46008931850e31c7
             raise ValueError('Error: invalid value encountered while calculating derivatives.')
         anew = autodiff.autodiff(name=ad.name, val = np.arccos(ad.val), der = ad.der)
         anew.lparent = ad
         anew.function = arccos
 
         for key in ad.der:
+<<<<<<< HEAD
             if ad.der[key].shape == (-1/np.sqrt(1 - ad.val**2)).shape:
                 anew.der[key] = -1/np.sqrt(1 - ad.val**2)*ad.der[key]
             else:
                 anew.der[key] = np.dot(-1/np.sqrt(1 - ad.val**2), ad.der[key])
 
+=======
+            anew.der[key] = -1/np.sqrt(1 - ad.val**2)*ad.der[key]
+        anew.back_partial_der =  -1/np.sqrt(1 - ad.val**2)
+>>>>>>> 69c1bc8c48358ce5e0b61fcd46008931850e31c7
         return anew
     except AttributeError:
         raise AttributeError("Error: input should be autodiff instance only.")
@@ -356,15 +374,21 @@ def arctan(ad):
         anew.lparent = ad
 
         for key in ad.der:
+<<<<<<< HEAD
             if ad.der[key].shape == (1/(1+ad.val**2)).shape:
                 anew.der[key] = 1/(1+ad.val**2)*ad.der[key]
             else:
                 anew.der[key] = np.dot(1/(1+ad.val**2), ad.der[key])
 
+=======
+            anew.der[key] = 1/(1+ad.val**2)*ad.der[key]
+        anew.back_partial_der = 1/(1+ad.val**2)
+>>>>>>> 69c1bc8c48358ce5e0b61fcd46008931850e31c7
         return anew
     except AttributeError:
         raise AttributeError("Error: input should be autodiff instance only.")
-
+        
+        
 def sinh(ad):
     '''Returns autodiff instance of sinh(x)
 

@@ -144,6 +144,7 @@ class autodiff():
         if isinstance(other,list):
             other = np.asarray(other)
         anew = autodiff(self.name, self.val, self.der)
+<<<<<<< HEAD
         anew.lparent = self
         anew.rparent = other
 
@@ -153,22 +154,43 @@ class autodiff():
             anew.val = self.val/other.val
             self.back_partial_der = 1/other
 
+=======
+        
+        anew.lparent = self
+        anew.rparent = other
+        
+        try:
+            anew.val = self.val/other.val
+            anew.back_partial_der = 1/other.val
+        
+>>>>>>> 69c1bc8c48358ce5e0b61fcd46008931850e31c7
             for key in np.unique([key for key in self.der] + [key for key in other.der]):
                 if key not in self.der:
-                    anew.der[key]=self.val*other.der[key]/other.val**2
+                    anew.der[key]= -self.val*other.der[key]/(other.val**2)
                 elif key not in other.der:
                     anew.der[key]=self.der[key]/other.val
                 else:
                     anew.der[key]=0
+                    
+            self.back_partial_der = 1/other.val
+            other.back_partial_der = -self.val/(other.val**2)
+            
         except AttributeError:
             anew.val = self.val/other
             for key in self.der:
+<<<<<<< HEAD
                 anew.der[key] = (self.der[key])/other
 
                 self.back_partial_der = 1/other
 
 
 
+=======
+                anew.der[key] = self.der[key]/other
+                anew.val = self.val/other
+                anew.back_partial_der = 1/other
+                
+>>>>>>> 69c1bc8c48358ce5e0b61fcd46008931850e31c7
         return anew
 
 
@@ -184,12 +206,25 @@ class autodiff():
         anew.lparent = self
         anew.rparent = other
 
+<<<<<<< HEAD
         anew.function=self.__rtruediv__
         if isinstance(other, (int,float,list,np.ndarray)):
             for key in self.der:
                 anew.der[key] = -other*(self.der[key])/self.val**2
                 anew.val = other/self.val
                 self.back_partial_der = -1*(self.val**2)
+=======
+        if isinstance(other, (int,float)):
+            anew = autodiff(self.name, self.val, self.der)
+            anew.lparent = self
+            anew.rparent = other
+        
+            for key in self.der:
+                anew.der[key] = -other*self.der[key]/(self.val**2)
+                anew.val = other/self.val
+                
+            self.back_partial_der = -other/(self.val**2)
+>>>>>>> 69c1bc8c48358ce5e0b61fcd46008931850e31c7
             return anew
 
 
@@ -259,11 +294,17 @@ class autodiff():
 
         #Generate a new autodiff instance copy of self
         anew = autodiff(self.name, self.val, self.der)
+<<<<<<< HEAD
         anew.function=self.__sub__
 
         anew.lparent = self
         anew.rparent = other
 
+=======
+        anew.lparent = self
+        anew.rparent = other
+        
+>>>>>>> 69c1bc8c48358ce5e0b61fcd46008931850e31c7
         #Tries subtracting two autodiff instances together
         try:
             #Subtract values
@@ -282,7 +323,9 @@ class autodiff():
                 #Else, if both self and opponent have encountered this variable before
                 else:
                     anew.der[key] = self.der[key] - other.der[key]
-
+                    
+            self.back_partial_der = 1
+            other.back_partial_der = -1
         #Otherwise, if not two autodiff instances:
         except AttributeError:
             #Tries subtracting number from autodiff instance
@@ -290,7 +333,8 @@ class autodiff():
             for key in self.der:
                 anew.der[key] = self.der[key]
                 anew.val = self.val - other
-
+                
+            self.back_partial_der = 1
         #Returns new autodiff instance
         self.back_partial_der = 1
         return anew

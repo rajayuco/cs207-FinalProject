@@ -80,7 +80,7 @@ def test_truediv_result_ad():
     f2 = 2*x/x
     assert f1.val == 5
     assert f1.der['x'] == 1/2
-    assert f1.der['y'] == 10/4
+    assert f1.der['y'] == -10/4
     assert f2.val == 2
     assert f2.der['x'] == 0
 
