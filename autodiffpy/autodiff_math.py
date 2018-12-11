@@ -1,4 +1,7 @@
-# import packages
+#FILE: autodiff_math.py
+
+
+# Import packages
 import numpy as np
 import sys
 sys.path.append('..')
@@ -8,8 +11,8 @@ except:
     from autodiffpy import autodiff
 
 
-
-
+#FUNCTION: sqrt
+#PURPOSE: Calculate the square root of an autodiff instance.
 def sqrt(ad):
     """Returns autodiff instance of sqrt(x)
 
@@ -36,20 +39,28 @@ def sqrt(ad):
         # Check that the domain of the square root is valid
         if np.min(ad.val) < 0:
             raise ValueError('Error: cannot evaluate the square root of a negative number(s).')
-        
+
         # Create a new autodiff instance with forward result
         anew = autodiff.autodiff(name = ad.name, val = np.sqrt(ad.val), der = ad.der)
-        for key in ad.der: # Calculate derivatives for each variable
-            anew.der[key] = 1/(2*np.sqrt(ad.val))*ad.der[key]
-        
+
+        # Calculate derivatives for each variable
+        for key in ad.der:
+            if ad.der[key].shape == (1/(2*np.sqrt(ad.val))).shape: # Perform an element-wise calculation
+                anew.der[key] = 1/(2*np.sqrt(ad.val))*ad.der[key]
+            else: # Perform a dot-product calculation
+                anew.der[key] = np.dot(1/(2*np.sqrt(ad.val)), ad.der[key])
+
         # Update with the backpropagation derivatives
         anew.lparent = ad
+        anew.function = sqrt
         ad.back_partial_der = (1/2.0)*((ad.val)**(-1/2.0))
         return anew
-    except AttributeError: #If non-autodiff instance passed
+    except AttributeError: # If non-autodiff instance passed
         raise AttributeError("Error: input should be autodiff instance only.")
 
 
+#FUNCTION: sin
+#PURPOSE: Calculate the sine of an autodiff instance.
 def sin(ad):
     """Returns autodiff instance of sin(x)
 
@@ -72,16 +83,27 @@ def sin(ad):
     [-0.54402111] {'x': array([-0.83907153])}
     """
     try:
+        # Create a new autodiff instance with forward result
         anew = autodiff.autodiff(name=ad.name, val = np.sin(ad.val), der = ad.der)
-        anew.lparent = ad
+
+        # Calculate derivatives for each variable
         for key in ad.der:
-            anew.der[key] = np.cos(ad.val)*ad.der[key]
+            if ad.der[key].shape == np.cos(ad.val).shape: # Perform an element-wise calculation
+                anew.der[key] = ad.der[key]*np.cos(ad.val)
+            else: # Perform a dot-product calculation
+                anew.der[key] = np.dot(np.cos(ad.val), ad.der[key])
+
+        # Update with the backpropagation derivatives
+        anew.lparent = ad
+        anew.function = sin
         ad.back_partial_der = np.cos(ad.val)
         return anew
-    except AttributeError:
+    except AttributeError: # If non-autodiff instance passed
         raise AttributeError("Error: input should be autodiff instance only.")
 
 
+#FUNCTION: cos
+#PURPOSE: Calculate the cosine of an autodiff instance.
 def cos(ad):
     """Returns autodiff instance of cos(x)
 
@@ -101,18 +123,30 @@ def cos(ad):
     >>> x = autodiff.autodiff('x', 10)
     >>> f1 = admath.cos(x)
     >>> print(f1.val, f1.der)
-    [-0.83907153] {'x': array([0.54402111])}
+    [-0.83907153] {'x': 0.5440211108893698}
     """
     try:
+        # Create a new autodiff instance with forward result
         anew = autodiff.autodiff(name=ad.name, val = np.cos(ad.val), der = ad.der)
-        anew.lparent = ad
+
+        # Calculate derivatives for each variable
         for key in ad.der:
-            anew.der[key] = -np.sin(ad.val)*ad.der[key]
-        ad.back_partial_der = -np.sin(ad.val)
+            if ad.der[key].shape == -1*np.sin(ad.val).shape: # Perform an element-wise calculation
+                anew.der[key] = ad.der[key]*-1*np.sin(ad.val)
+            else: # Perform a dot-product calculation
+                anew.der[key] = np.dot(-1*np.sin(ad.val), ad.der[key])
+
+        # Update with the backpropagation derivatives
+        anew.lparent = ad
+        anew.function = cos
+        ad.back_partial_der = -1*np.sin(ad.val)
         return anew
-    except AttributeError:
+    except AttributeError: # If non-autodiff instance passed
         raise AttributeError("Error: input should be autodiff instance only.")
 
+
+#FUNCTION: tan
+#PURPOSE: Calculate the tangent of an autodiff instance.
 def tan(ad):
     """Returns autodiff instance of tan(x)
 
@@ -135,17 +169,28 @@ def tan(ad):
     [0.64836083] {'x': array([1.42037176])}
     """
     try:
+        # Create a new autodiff instance with forward result
         anew = autodiff.autodiff(name=ad.name, val = np.tan(ad.val), der = ad.der)
-        anew.lparent = ad
+
+        # Calculate derivatives for each variable
         for key in ad.der:
-            anew.der[key] = 1/(np.cos(ad.val))**2*ad.der[key]
+            if ad.der[key].shape == (1/(np.cos(ad.val))**2).shape: # Perform an element-wise calculation
+                anew.der[key] = 1/(np.cos(ad.val))**2*ad.der[key]
+            else: # Perform a dot-product calculation
+                anew.der[key] = np.dot(1/(np.cos(ad.val))**2, ad.der[key])
+
+        # Update with the backpropagation derivatives
+        anew.lparent = ad
+        anew.function = tan
         ad.back_partial_der = 1/(np.cos(ad.val))**2
         return anew
-    except AttributeError:
+    except AttributeError: # If non-autodiff instance passed
         raise AttributeError("Error: input should be autodiff instance only.")
 
-def log(ad, base = np.e):
 
+#FUNCTION: log
+#PURPOSE: Calculate the logarithm of an autodiff instance.
+def log(ad, base = np.e):
     '''Returns autodiff instance of log(x)
 
     INPUTS
@@ -170,24 +215,31 @@ def log(ad, base = np.e):
     [0.13533528]
     '''
     try:
-        if isinstance(ad.val, list):
-            for val in ad.val:
-                if val <= 0:
-                    raise ValueError('Error: cannot evaluate the log of a nonpositive number.')
+        # Check that the domain of the logarithm is valid
+        if np.min(ad.val) <= 0:
+            raise ValueError('Error: cannot evaluate the log of a nonpositive number.')
 
-        elif ad.val<=0:
-                raise ValueError('Error: cannot evaluate the log of a nonpositive number.')
-
+        # Create a new autodiff instance with forward result
         anew = autodiff.autodiff(name = ad.name, val = np.log(ad.val)/np.log(base), der = ad.der)
-        anew.lparent = ad
+
+        # Calculate derivatives for each variable
         for key in ad.der:
-            anew.der[key] = ad.der[key]/(ad.val*(np.log(base)/np.log(np.e)))
-        ad.back_partial_der = 1/(ad.val*(np.log(base)/np.log(np.e)))
+            if ad.der[key].shape == (ad.val*(np.log(base))).shape: # Perform an element-wise calculation
+                anew.der[key] = ad.der[key]/(ad.val*(np.log(base)))
+            else: # Perform a dot-product calculation
+                anew.der[key] = np.dot(1/(ad.val*(np.log(base))), ad.der[key])
+
+        # Update with the backpropagation derivatives
+        anew.lparent = ad
+        anew.function = log
+        ad.back_partial_der = 1/(ad.val*(np.log(base)))
         return anew
-    except AttributeError:
+    except AttributeError: # If non-autodiff instance passed
         raise AttributeError("Error: input should be autodiff instance only.")
 
 
+#FUNCTION: exp
+#PURPOSE: Calculate the exponential of an autodiff instance.
 def exp(ad):
     '''Returns autodiff instance of exp(x)
 
@@ -213,16 +265,27 @@ def exp(ad):
     '''
 
     try:
+        # Create a new autodiff instance with forward result
         anew = autodiff.autodiff(name=ad.name, val = np.exp(ad.val), der = ad.der)
-        anew.lparent = ad
+
+        # Calculate derivatives for each variable
         for key in ad.der:
-            anew.der[key] = ad.der[key]*anew.val
+            if ad.der[key].shape == anew.val.shape: # Perform an element-wise calculation
+                anew.der[key] = ad.der[key]*anew.val
+            else: # Perform a dot-product calculation
+                anew.der[key] = np.dot(anew.val, ad.der[key])
+
+        # Update with the backpropagation derivatives
+        anew.lparent = ad
+        anew.function = exp
         ad.back_partial_der = anew.val
         return anew
-    except AttributeError:
+    except AttributeError: # If non-autodiff instance passed
         raise AttributeError("Error: input should be autodiff instance only.")
 
 
+#FUNCTION: arcsin
+#PURPOSE: Calculate the arcsine of an autodiff instance.
 def arcsin(ad):
     """Returns autodiff instance of arcsin(x)
 
@@ -245,15 +308,30 @@ def arcsin(ad):
     [0.10016742] {'x': array([1.00503782])}
     """
     try:
-        if ad.val**2 > 1:
+        # Check that the domain of the arcsine is valid
+        if min(ad.val**2) > 1:
             raise ValueError('Error: invalid value encountered while calculating derivatives.')
+
+        # Create a new autodiff instance with forward result
         anew = autodiff.autodiff(name=ad.name, val = np.arcsin(ad.val), der = ad.der)
+
+        # Calculate derivatives for each variable
         for key in ad.der:
-            anew.der[key] = 1/np.sqrt(1 - ad.val**2)*ad.der[key]
+            if ad.der[key].shape == (1/np.sqrt(1 - ad.val**2)).shape: # Perform an element-wise calculation
+                anew.der[key] = 1/np.sqrt(1 - ad.val**2)*ad.der[key]
+            else: # Perform a dot-product calculation
+                anew.der[key] = np.dot(1/np.sqrt(1 - ad.val**2), ad.der[key])
+
+        # Update with the backpropagation derivatives
+        anew.lparent = ad
+        anew.function = arcsin
         return anew
-    except AttributeError:
+    except AttributeError: # If non-autodiff instance passed
         raise AttributeError("Error: input should be autodiff instance only.")
 
+
+#FUNCTION: arccos
+#PURPOSE: Calculate the arccosine of an autodiff instance.
 def arccos(ad):
     """Returns autodiff instance of arccos(x)
 
@@ -276,16 +354,30 @@ def arccos(ad):
     [1.36943841] {'x': array([-1.02062073])}
     """
     try:
-        if ad.val**2 > 1:
+        # Check that the domain of the arccosine is valid
+        if min(ad.val**2) > 1:
             raise ValueError('Error: invalid value encountered while calculating derivatives.')
+
+        # Create a new autodiff instance with forward result
         anew = autodiff.autodiff(name=ad.name, val = np.arccos(ad.val), der = ad.der)
+
+        # Calculate derivatives for each variable
         for key in ad.der:
-            anew.der[key] = -1/np.sqrt(1 - ad.val**2)*ad.der[key]
+            if ad.der[key].shape == (-1/np.sqrt(1 - ad.val**2)).shape: # Perform an element-wise calculation
+                anew.der[key] = -1/np.sqrt(1 - ad.val**2)*ad.der[key]
+            else: # Perform a dot-product calculation
+                anew.der[key] = np.dot(-1/np.sqrt(1 - ad.val**2), ad.der[key])
+
+        # Update with the backpropagation derivatives
+        anew.lparent = ad
+        anew.function = arccos
         return anew
-    except AttributeError:
+    except AttributeError: # If non-autodiff instance passed
         raise AttributeError("Error: input should be autodiff instance only.")
 
 
+#FUNCTION: arctan
+#PURPOSE: Calculate the arctangent of an autodiff instance.
 def arctan(ad):
     """Returns autodiff instance of arctan(x)
 
@@ -308,13 +400,26 @@ def arctan(ad):
     [0.19739556] {'x': array([0.96153846])}
     """
     try:
+        # Create a new autodiff instance with forward result
         anew = autodiff.autodiff(name=ad.name, val = np.arctan(ad.val), der = ad.der)
+
+        # Calculate derivatives for each variable
         for key in ad.der:
-            anew.der[key] = 1/(1+ad.val**2)*ad.der[key]
+            if ad.der[key].shape == (1/(1+ad.val**2)).shape: # Perform an element-wise calculation
+                anew.der[key] = 1/(1+ad.val**2)*ad.der[key]
+            else: # Perform a dot-product calculation
+                anew.der[key] = np.dot(1/(1+ad.val**2), ad.der[key])
+
+        # Update with the backpropagation derivatives
+        anew.function = arctan
+        anew.lparent = ad
         return anew
-    except AttributeError:
+    except AttributeError: # If non-autodiff instance passed
         raise AttributeError("Error: input should be autodiff instance only.")
 
+
+#FUNCTION: sinh
+#PURPOSE: Calculate the sinh of an autodiff instance.
 def sinh(ad):
     '''Returns autodiff instance of sinh(x)
 
@@ -338,20 +443,28 @@ def sinh(ad):
     >>> print(f1.der['x'] == [np.cosh(5)])
     [ True]
     '''
-
     try:
         # Create a new autodiff instance with forward result
         anew = autodiff.autodiff(name=ad.name, val = np.sinh(ad.val), der = ad.der)
+
+        # Calculate derivatives for each variable
         for key in ad.der:
-            anew.der[key] = ad.der[key]*np.cosh(ad.val)
+            if ad.der[key].shape == np.cosh(ad.val).shape: # Perform an element-wise calculation
+                anew.der[key] = ad.der[key]*np.cosh(ad.val)
+            else: # Perform a dot-product calculation
+                anew.der[key] = np.dot(np.cosh(ad.val), ad.der[key])
+
         # Update with the backpropagation derivatives
+        anew.function = sinh
         anew.lparent = ad
         ad.back_partial_der = np.cosh(ad.val)
-
         return anew
     except AttributeError: #If non-autodiff instance passed
         raise AttributeError("Error: input should be autodiff instance only.")
 
+
+#FUNCTION: cosh
+#PURPOSE: Calculate the cosh of an autodiff instance.
 def cosh(ad):
     '''Returns autodiff instance of cosh(x)
 
@@ -375,20 +488,28 @@ def cosh(ad):
     >>> print(f1.der['x'] == [np.sinh(5)])
     [ True]
     '''
-
     try:
         # Create a new autodiff instance with forward result
         anew = autodiff.autodiff(name=ad.name, val = np.cosh(ad.val), der = ad.der)
+
+        # Calculate derivatives for each variable
         for key in ad.der:
-            anew.der[key] = ad.der[key]*np.sinh(ad.val)
+            if ad.der[key].shape == np.sinh(ad.val).shape: # Perform an element-wise calculation
+                anew.der[key] = ad.der[key]*np.sinh(ad.val)
+            else: # Perform a dot-product calculation
+                anew.der[key] = np.dot(np.sinh(ad.val), ad.der[key])
+
         # Update with the backpropagation derivatives
+        anew.function = cosh
         anew.lparent = ad
         ad.back_partial_der = np.sinh(ad.val)
-
         return anew
     except AttributeError: #If non-autodiff instance passed
         raise AttributeError("Error: input should be autodiff instance only.")
 
+
+#FUNCTION: tanh
+#PURPOSE: Calculate the tanh of an autodiff instance.
 def tanh(ad):
     '''Returns autodiff instance of tanh(x)
 
@@ -412,20 +533,28 @@ def tanh(ad):
     >>> print(f1.der['x'] == [(1.0/np.cosh(5))**2])
     [ True]
     '''
-
     try:
         # Create a new autodiff instance with forward result
         anew = autodiff.autodiff(name=ad.name, val = np.tanh(ad.val), der = ad.der)
+
+        # Calculate derivatives for each variable
         for key in ad.der:
-            anew.der[key] = ad.der[key]*((1.0/np.cosh(ad.val))**2)
+            if ad.der[key].shape == ((1.0/np.cosh(ad.val))**2).shape: # Perform an element-wise calculation
+                anew.der[key] = ad.der[key]*((1.0/np.cosh(ad.val))**2)
+            else: # Perform a dot-product calculation
+                anew.der[key] = np.dot(((1.0/np.cosh(ad.val))**2), ad.der[key])
+
         # Update with the backpropagation derivatives
+        anew.function = tanh
         anew.lparent = ad
         ad.back_partial_der = ((1.0/np.cosh(ad.val))**2)
-
         return anew
     except AttributeError: #If non-autodiff instance passed
         raise AttributeError("Error: input should be autodiff instance only.")
 
+
+#FUNCTION: logistic
+#PURPOSE: Calculate the logistic of an autodiff instance.
 def logistic(ad, A=1.0, k=1.0, x0=0.0):
     '''Returns autodiff instance of the logistic function of x
 
@@ -453,16 +582,21 @@ def logistic(ad, A=1.0, k=1.0, x0=0.0):
     >>> print(f1.der['x'] == [12*np.exp(-4*(5 - 7))/1.0/((np.exp(-4*(5 - 7)) + 1)**2)])
     [ True]
     '''
-
     try:
         # Create a new autodiff instance with forward result
         anew = autodiff.autodiff(name=ad.name, val = (A/1.0/(1.0 + np.exp(-1.0*k*(ad.val - x0)))), der = ad.der)
+
+        # Create a new autodiff instance with forward result
         for key in ad.der:
-            anew.der[key] = (A*k*ad.der[key])*np.exp(-1.0*k*(ad.val - x0))/1.0/((np.exp(-1.0*k*(ad.val - x0)) + 1.0)**2)
+            if ad.der[key].shape == (A*k*np.exp(-1.0*k*(ad.val - x0))/1.0/((np.exp(-1.0*k*(ad.val - x0)) + 1.0)**2)).shape: # Perform an element-wise calculation
+                anew.der[key] = ad.der[key]*A*k*np.exp(-1.0*k*(ad.val - x0))/1.0/((np.exp(-1.0*k*(ad.val - x0)) + 1.0)**2)
+            else: # Perform a dot-product calculation
+                anew.der[key] = np.dot(A*k*np.exp(-1.0*k*(ad.val - x0))/1.0/((np.exp(-1.0*k*(ad.val - x0)) + 1.0)**2), ad.der[key])
+
         # Update with the backpropagation derivatives
+        anew.function = logistic
         anew.lparent = ad
         ad.back_partial_der = (A*k)*np.exp(-1.0*k*(ad.val - x0))/1.0/((np.exp(-1.0*k*(ad.val - x0)) + 1.0)**2)
-
         return anew
     except AttributeError: #If non-autodiff instance passed
         raise AttributeError("Error: input should be autodiff instance only.")
