@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 numpy==1.15.1
-=======
-numpy== 1.15.1
->>>>>>> 69c1bc8c48358ce5e0b61fcd46008931850e31c7
 pandas == 0.22.0
 pytest==3.8.0
 pytest-arraydiff==0.2
