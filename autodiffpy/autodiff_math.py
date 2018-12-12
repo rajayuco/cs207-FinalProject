@@ -4,9 +4,9 @@ import sys
 sys.path.append('..')
 
 try:
-    import autodiffmod
+    import autodiffmod as autodiff
 except:
-    from autodiffpy import autodiffmod
+    from autodiffpy import autodiffmod as autodiff
 
 
 
@@ -24,7 +24,7 @@ def sqrt(ad):
 
     EXAMPLES
     =========
-    >>> from autodiffpy import autodiff
+    >>> from autodiffpy import autodiffmod as autodiff
     >>> from autodiffpy import autodiff_math as admath
     >>> x = autodiff.autodiff('x', 3)
     >>> y = autodiff.autodiff('y', 4)
@@ -70,7 +70,7 @@ def sin(ad):
 
     EXAMPLES
     =========
-    >>> from autodiffpy import autodiff
+    >>> from autodiffpy import autodiffmod as autodiff
     >>> from autodiffpy import autodiff_math as admath
     >>> x = autodiff.autodiff('x', 10)
     >>> f1 = admath.sin(x)
@@ -108,7 +108,7 @@ def cos(ad):
 
     EXAMPLES
     =========
-    >>> from autodiffpy import autodiff
+    >>> from autodiffpy import autodiffmod as autodiff
     >>> from autodiffpy import autodiff_math as admath
     >>> x = autodiff.autodiff('x', 10)
     >>> f1 = admath.cos(x)
@@ -144,7 +144,7 @@ def tan(ad):
 
     EXAMPLES
     =========
-    >>> from autodiffpy import autodiff
+    >>> from autodiffpy import autodiffmod as autodiff
     >>> from autodiffpy import autodiff_math as admath
     >>> x = autodiff.autodiff('x', 10)
     >>> f1 = admath.tan(x)
@@ -183,7 +183,7 @@ def log(ad, base = np.e):
     EXAMPLES
     ==========
     >>> import numpy as np
-    >>> from autodiffpy import autodiff
+    >>> from autodiffpy import autodiffmod as autodiff
     >>> from autodiffpy import autodiff_math as admath
     >>> x = autodiff.autodiff('x', np.exp(2))
     >>> f1 = admath.log(x)
@@ -227,7 +227,7 @@ def exp(ad):
     EXAMPLES
     ==========
     >>> import numpy as np
-    >>> from autodiffpy import autodiff
+    >>> from autodiffpy import autodiffmod as autodiff
     >>> from autodiffpy import autodiff_math as admath
     >>> x = autodiff.autodiff('x', 10)
     >>> f1 = admath.exp(x)
@@ -266,7 +266,7 @@ def arcsin(ad):
 
     EXAMPLES
     =========
-    >>> from autodiffpy import autodiff
+    >>> from autodiffpy import autodiffmod as autodiff
     >>> from autodiffpy import autodiff_math as admath
     >>> x = autodiff.autodiff('x', 0.1)
     >>> f1 = admath.arcsin(x)
@@ -308,7 +308,7 @@ def arccos(ad):
 
     EXAMPLES
     =========
-    >>> from autodiffpy import autodiff
+    >>> from autodiffpy import autodiffmod as autodiff
     >>> from autodiffpy import autodiff_math as admath
     >>> x = autodiff.autodiff('x', 0.2)
     >>> f1 = admath.arccos(x)
@@ -350,7 +350,7 @@ def arctan(ad):
 
     EXAMPLES
     =========
-    >>> from autodiffpy import autodiff
+    >>> from autodiffpy import autodiffmod as autodiff
     >>> from autodiffpy import autodiff_math as admath
     >>> x = autodiff.autodiff('x', 0.2)
     >>> f1 = admath.arctan(x)
@@ -389,7 +389,7 @@ def sinh(ad):
     EXAMPLES
     ==========
     >>> import numpy as np
-    >>> from autodiffpy import autodiff
+    >>> from autodiffpy import autodiffmod as autodiff
     >>> from autodiffpy import autodiff_math as admath
     >>> x = autodiff.autodiff('x', 5)
     >>> f1 = admath.sinh(x)
@@ -433,7 +433,7 @@ def cosh(ad):
     EXAMPLES
     ==========
     >>> import numpy as np
-    >>> from autodiffpy import autodiff
+    >>> from autodiffpy import autodiffmod as autodiff
     >>> from autodiffpy import autodiff_math as admath
     >>> x = autodiff.autodiff('x', 5)
     >>> f1 = admath.cosh(x)
@@ -477,7 +477,7 @@ def tanh(ad):
     EXAMPLES
     ==========
     >>> import numpy as np
-    >>> from autodiffpy import autodiff
+    >>> from autodiffpy import autodiffmod as autodiff
     >>> from autodiffpy import autodiff_math as admath
     >>> x = autodiff.autodiff('x', 5)
     >>> f1 = admath.tanh(x)
@@ -526,7 +526,7 @@ def logistic(ad, A=1.0, k=1.0, x0=0.0):
     EXAMPLES
     ==========
     >>> import numpy as np
-    >>> from autodiffpy import autodiff
+    >>> from autodiffpy import autodiffmod as autodiff
     >>> from autodiffpy import autodiff_math as admath
     >>> x = autodiff.autodiff('x', 5)
     >>> f1 = admath.logistic(x, A=3, k=4, x0=7)
