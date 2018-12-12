@@ -356,7 +356,7 @@ class autodiff():
         except AttributeError:
             #Tries adding autodiff instance and number together
             for key in self.der:
-                if anew.der[key].shape == (other*(self.val**(other - 1))).shape:
+                if self.der[key].shape == (other*(self.val**(other - 1))).shape:
                     anew.der[key] = other*(self.val**(other - 1))*self.der[key]
                 else:
                     anew.der[key] = np.dot(other*(self.val**(other - 1)),self.der[key])
