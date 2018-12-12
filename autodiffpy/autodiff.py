@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
-from autodiff_math import *
-#from autodiffpy.autodiff_math import *
+#from autodiff_math import *
+from autodiffpy.autodiff_math import *
 
 class autodiff():
     def __init__(self,name,val,der=1):
@@ -193,11 +193,7 @@ class autodiff():
         if isinstance(other, (int,float,list,np.ndarray)):
 
             for key in self.der:
-                if self.der[key].shape == other.shape:
-
-                    anew.der[key] = -other*(self.der[key])/self.val**2
-                else:
-                    raise ValueError("Error: Cannot divide matrices of different sizes.")
+                anew.der[key] = -other*(self.der[key])/self.val**2
 
             anew.val = other/self.val
             self.back_partial_der = -1*(self.val**2)
@@ -360,8 +356,13 @@ class autodiff():
         except AttributeError:
             #Tries adding autodiff instance and number together
             for key in self.der:
-                anew.der[key] = other*(self.val**(other - 1))*self.der[key]
-                anew.val = self.val**other
+                if anew.der[key].shape == (other*(self.val**(other - 1))).shape:
+                    anew.der[key] = other*(self.val**(other - 1))*self.der[key]
+                else:
+                    anew.der[key] = np.dot(other*(self.val**(other - 1)),self.der[key])
+
+
+            anew.val = self.val**other
             self.back_partial_der = other*self.val**(other-1)
         #Returns new autodiff instance
         return anew
@@ -381,7 +382,8 @@ class autodiff():
         #Tries autodiff instance and number together
         for key in self.der:
             anew.der[key] = (other**self.val)*np.log(other)*self.der[key]
-            anew.val = other**self.val
+
+        anew.val = other**self.val
         self.back_partial_der = other**(self.val)*np.log(other)
         #Return new autodiff instance
         return anew
