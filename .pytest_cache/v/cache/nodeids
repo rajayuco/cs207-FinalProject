@@ -74,5 +74,7 @@
   "tests/autodiff_test.py::test_gradient_descent_MSE",
   "tests/autodiff_test.py::test_gradient_descent_MAE",
   "tests/autodiff_test.py::test_gradient_descent_RMSE",
-  "tests/autodiff_test.py::test_gradient_descent_weightname"
+  "tests/autodiff_test.py::test_gradient_descent_weightname",
+  "tests/autodiff_test.py::test_gradient_descent_MSE2",
+  "tests/autodiff_test.py::test_backprop_ytrue_input"
 ]

@@ -347,6 +347,12 @@ def test_backprop_sincostanlog():
     # f.backprop() = {'x': array([-1.38686635])}
     assert pytest.approx(f.backprop(y_true=[2])[0]['x'][0]) == -1.386866349701885*f.back_der
 
+
+def test_backprop_ytrue_input():
+    w = ad.autodiff('w', val = [1,2], der = [1,1])
+    y_true = (2,2)
+    assert w.backprop(y_true)[1] == 0.5
+
 ## Test gradient_descent() with MSE loss
 def test_gradient_descent_MSE():
    x = np.array([[1,-2,1],[3,0,4]]) #Data
@@ -423,3 +429,16 @@ def test_gradient_descent_weightname():
     with pytest.raises(ValueError):
     # Run gradient descent
         g = ad.gradient_descent(f, y_act, beta=beta, loss=loss, max_iter=max_iter, tol=tol)
+
+def test_gradient_descent_MSE2():
+    X_data = np.array([1, 2, 3, 4, 5]) # Input x-data
+    Y_true = 3*X_data # Actual y-values
+
+    # Create initial weights for the data
+    w = ad.autodiff('w', [1 for i in range(0, len(Y_true))])
+    f1 = w*X_data # Functional form
+
+    # Run MSE-loss gradient descent
+    g = ad.gradient_descent(f1, Y_true, loss='MSE', beta=0.001, max_iter=5000, tol=0.05)
+
+    assert g['loss_array'][-1] <= 0.05

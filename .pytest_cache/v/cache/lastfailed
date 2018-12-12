@@ -3,6 +3,7 @@
   "autodiffpy/autodiff_math.py::autodiffpy.autodiff_math.sin": true,
   "autodiffpy/autodiff_math.py::autodiffpy.autodiff_math.tan": true,
   "tests/autodiff_math_test.py::test_sin_type": true,
+  "tests/autodiff_test.py::test_dataframe": true,
   "tests/autodiff_test.py::test_gradient_descent_MPAE": true,
   "tests/autodiff_test.py::test_rpow_dotproduct": true
 }
