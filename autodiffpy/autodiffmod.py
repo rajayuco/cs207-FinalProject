@@ -389,6 +389,26 @@ class autodiff():
         return anew
 
     def jacobian(self, order=None):
+        """Returns a dictionary containing an ND-array representation of the derivatives of this autodiff instance, as well as the ordering of the variables that those derivatives are taken in respect to.
+
+        INPUTS
+        =======
+        None
+
+        RETURNS
+        ========
+        dictionary containing array representation (under key "jacobian") and the ordering of the variables (under key "order")
+
+        EXAMPLES
+        =========
+        >>> from autodiffpy import autodiffmod as autodiff
+        >>> x = autodiff.autodiff('x', 3)
+        >>> y = autodiff.autodiff('y', 4)
+        >>> f1 = autodiff.sqrt(x*y)
+        >>> resdict = f1.jacobian(order=['y', 'x'])
+        >>> print(resdict["order"], resdict["jacobian"])
+        ['y', 'x'] array([0.4330127, 0.57735027])
+        """
         if order is not None: # If specific ordering requested
             order = list(order)
             jacobian = [None]*len(order)
@@ -508,6 +528,37 @@ class autodiff():
 
 
 def gradient_descent(f,y_true, loss = 'MSE', beta= 0.01, max_iter = 10000, tol=10**(-8)):
+    """Runs gradient descent for the given function, using the specified loss function to calculate loss.
+
+    INPUTS
+    =======
+    f: autodiff instance
+    y_true: desired outputs
+    loss: string name of the desired loss function; allowed types are ['MSE', 'MAE', 'RMSE']
+    beta: learning rate (constant)
+    max_iter: maximum allowed number of iterations
+    tol: minimum desired loss for the function
+
+    RETURNS
+    ========
+    dictionary containing the following keys and values:
+       'f': the final function autodiff instance
+       'w': the final weights
+       'loss_array': an array of all losses for all iterations (under key 'loss_array')
+       'max_iter': total number of iterations
+
+    EXAMPLES
+    =========
+    >>> from autodiffpy import autodiffmod as ad
+    >>> import numpy as np
+    >>> x_data = np.linspace([1, 2, 3, 4, 5])
+    >>> y_true = 3*x_data
+    >>> w = ad.autodiff('w', [1, 1, 1, 1, 1])
+    >>> f1 = w*x
+    >>> g = ad.gradient_descent(f1, y_true, loss='MSE', beta=0.001, max_iter=5000, tol=1E-5)
+    >>> print(np.abs(g.val - y_true) <= 1E-5)
+    array([True, True, True, True, True])
+    """
     #get w from f
     j = 0
     w=f.lparent
