@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
-#from autodiff_math import *
-from autodiffpy.autodiff_math import *
+from autodiff_math import *
+#from autodiffpy.autodiff_math import *
 
 class autodiff():
     def __init__(self,name,val,der=1):
@@ -167,6 +167,7 @@ class autodiff():
 
         except AttributeError:
             anew.val = self.val/other
+
             for key in self.der:
                 anew.der[key] = (self.der[key])/other
 
@@ -180,7 +181,7 @@ class autodiff():
 
         if isinstance(other, (int, float, list, np.ndarray, autodiff)) == False:
             raise ValueError("Error: Only integer, float, list, numpy arrays, or autodiff instances can be divided.")
-        if isinstance(other,list):
+        if isinstance(other,(list,float,int)):
             other = np.asarray(other)
 
         anew = autodiff(self.name, self.val, self.der)
@@ -190,10 +191,16 @@ class autodiff():
 
         anew.function=self.__rtruediv__
         if isinstance(other, (int,float,list,np.ndarray)):
+
             for key in self.der:
-                anew.der[key] = -other*(self.der[key])/self.val**2
-                anew.val = other/self.val
-                self.back_partial_der = -1*(self.val**2)
+                if self.der[key].shape == other.shape:
+
+                    anew.der[key] = -other*(self.der[key])/self.val**2
+                else:
+                    raise ValueError("Error: Cannot divide matrices of different sizes.")
+
+            anew.val = other/self.val
+            self.back_partial_der = -1*(self.val**2)
 
             return anew
 
