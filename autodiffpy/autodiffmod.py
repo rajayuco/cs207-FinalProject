@@ -408,7 +408,7 @@ class autodiff():
         >>> f1 = admath.sqrt(x*y)
         >>> resdict = f1.jacobian(order=['y', 'x'])
         >>> print(resdict["order"], resdict["jacobian"])
-        ['y', 'x'] array([0.4330127, 0.57735027])
+        ['y', 'x'] [[0.4330127 ][0.57735027]]
         """
         if order is not None: # If specific ordering requested
             order = list(order)
@@ -557,7 +557,7 @@ def gradient_descent(f,y_true, loss = 'MSE', beta= 0.01, max_iter = 10000, tol=1
     >>> w = ad.autodiff('w', [1, 1, 1, 1, 1])
     >>> f1 = w*x_data
     >>> g = ad.gradient_descent(f1, y_true, loss='MSE', beta=0.001, max_iter=5000, tol=1E-5)
-    >>> print(np.abs(g.val - y_true) <= 1E-5)
+    >>> print(np.abs(g['f'].val - y_true) <= 1E-5)
     array([True, True, True, True, True])
     """
     #get w from f
