@@ -441,7 +441,7 @@ class autodiff():
             if isinstance(y_true,list):
                 y_true = np.asarray(y_true)
             elif not isinstance(y_true, np.ndarray):
-                y_true = np.asarray([y_true])
+                y_true = np.asarray(y_true)
             backproplist = {}
 
             if loss == 'MSE':
@@ -565,6 +565,7 @@ def gradient_descent(f,y_true, loss = 'MSE', beta= 0.01, max_iter = 10000, tol=1
     w=f.lparent
     while j<100 and w.lparent is not None:
         w = w.lparent
+        j += 1
     if w.name != 'w':
         raise ValueError('Could not find weight vector. Be sure to name the weight autodiff as "w"')
 
