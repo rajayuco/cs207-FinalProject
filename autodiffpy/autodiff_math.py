@@ -121,7 +121,7 @@ def cos(ad):
         anew.function = cos
 
         for key in ad.der:
-            if ad.der[key].shape == -1*np.sin(ad.val).shape:
+            if ad.der[key].shape == (-1*np.sin(ad.val)).shape:
                 anew.der[key] = ad.der[key]*-1*np.sin(ad.val)
             else:
                 anew.der[key] = np.dot(-1*np.sin(ad.val), ad.der[key])
