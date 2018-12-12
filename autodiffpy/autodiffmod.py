@@ -409,7 +409,7 @@ class autodiff():
         >>> resdict = f1.jacobian(order=['y', 'x'])
         >>> print(resdict["order"], resdict["jacobian"])
         ['y', 'x'] [[0.4330127 ]
-     [0.57735027]]
+        [0.57735027]]
         """
         if order is not None: # If specific ordering requested
             order = list(order)
