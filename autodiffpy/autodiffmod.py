@@ -442,8 +442,6 @@ class autodiff():
                 y_true = np.asarray(y_true)
             elif isinstance(y_true, (float, int)):
                 y_true = np.asarray([y_true])
-            elif not isinstance(y_true, np.ndarray):
-                y_true = np.asarray(y_true)
             backproplist = {}
 
             if loss == 'MSE':
