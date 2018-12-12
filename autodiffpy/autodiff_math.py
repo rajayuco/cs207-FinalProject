@@ -4,9 +4,9 @@ import sys
 sys.path.append('..')
 
 try:
-    import autodiff
+    import autodiffmod
 except:
-    from autodiffpy import autodiff
+    from autodiffpy import autodiffmod
 
 
 

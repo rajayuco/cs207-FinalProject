@@ -5,7 +5,7 @@ import pandas as pd
 
 sys.path.append('..')
 import numpy as np
-from autodiffpy import autodiff as ad
+from autodiffpy import autodiffmod as ad
 from autodiffpy import autodiff_math as admath
 
 
