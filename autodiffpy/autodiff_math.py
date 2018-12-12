@@ -108,12 +108,11 @@ def cos(ad):
 
     EXAMPLES
     =========
-    >>> from autodiffpy import autodiffmod as autodiff
-    >>> from autodiffpy import autodiff_math as admath
-    >>> x = autodiff.autodiff('x', 10)
-    >>> f1 = admath.cos(x)
+    >>> from autodiffpy import autodiffmod as ad
+    >>> x = ad.autodiff('x', 10)
+    >>> f1 = ad.cos(x)
     >>> print(f1.val, f1.der)
-    [-0.83907153] {'x': 0.5440211108893698}
+    [-0.83907153] {'x': array([0.54402111])}
     """
     try:
         anew = autodiff.autodiff(name=ad.name, val = np.cos(ad.val), der = ad.der)

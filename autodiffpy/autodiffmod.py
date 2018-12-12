@@ -401,10 +401,10 @@ class autodiff():
 
         EXAMPLES
         =========
-        >>> from autodiffpy import autodiffmod as autodiff
-        >>> x = autodiff.autodiff('x', 3)
-        >>> y = autodiff.autodiff('y', 4)
-        >>> f1 = autodiff.sqrt(x*y)
+        >>> from autodiffpy import autodiffmod as ad
+        >>> x = ad.autodiff('x', 3)
+        >>> y = ad.autodiff('y', 4)
+        >>> f1 = ad.sqrt(x*y)
         >>> resdict = f1.jacobian(order=['y', 'x'])
         >>> print(resdict["order"], resdict["jacobian"])
         ['y', 'x'] array([0.4330127, 0.57735027])
@@ -551,7 +551,7 @@ def gradient_descent(f,y_true, loss = 'MSE', beta= 0.01, max_iter = 10000, tol=1
     =========
     >>> from autodiffpy import autodiffmod as ad
     >>> import numpy as np
-    >>> x_data = np.linspace([1, 2, 3, 4, 5])
+    >>> x_data = np.linspace(1,5,5)
     >>> y_true = 3*x_data
     >>> w = ad.autodiff('w', [1, 1, 1, 1, 1])
     >>> f1 = w*x

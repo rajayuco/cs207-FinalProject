@@ -31,7 +31,7 @@ def test_sqrt_dotproduct():
     w = ad.autodiff('w', [3,-1,0]) #Weights
 
     # Set up parameters for gradient descent
-    f1 = ad.sqrt(w*x)
+    f1 = admath.sqrt(w*x)
     assert f1 == f1.forwardprop()
 
 
@@ -46,7 +46,7 @@ def test_sin_dotproduct():
     w = ad.autodiff('w', [3,-1,0]) #Weights
 
     # Set up parameters for gradient descent
-    f1 = ad.sin(w*x)
+    f1 = admath.sin(w*x)
     assert f1 == f1.forwardprop()
 
 ## Test cosine function
@@ -59,7 +59,7 @@ def test_cos_dotproduct():
     x = np.array([[1,-2,1],[3,0,4]]) #Data
     w = ad.autodiff('w', [3,-1,0]) #Weights
     # Set up parameters for gradient descent
-    f1 = ad.cos(w*x)
+    f1 = admath.cos(w*x)
     assert f1 == f1.forwardprop()
 
 ## Test tangent function
@@ -72,7 +72,7 @@ def test_tan_dotproduct():
     x = np.array([[1,-2,1],[3,0,4]]) #Data
     w = ad.autodiff('w', [3,-1,0]) #Weights
     # Set up parameters for gradient descent
-    f1 = ad.tan(w*x)
+    f1 = admath.tan(w*x)
     assert f1 == f1.forwardprop()
 
 ## Test trigonometric types
@@ -106,7 +106,7 @@ def test_exp_dotproduct():
     x = np.array([[1,-2,1],[3,0,4]]) #Data
     w = ad.autodiff('w', [3,-1,0]) #Weights
     # Set up parameters for gradient descent
-    f1 = ad.exp(w*x)
+    f1 = admath.exp(w*x)
     assert f1 == f1.forwardprop()
 
 ## Test logarithm function
@@ -119,7 +119,7 @@ def test_log_dotproduct():
     x = np.array([[1,-2,1],[3,0,4]]) #Data
     w = ad.autodiff('w', [3,-1,0]) #Weights
     # Set up parameters for gradient descent
-    f1 = ad.log(w*x)
+    f1 = admath.log(w*x)
     assert f1 == f1.forwardprop()
 
 ## Test logarithm function, any base
@@ -156,7 +156,7 @@ def test_sinh_dotproduct():
     x = np.array([[1,-2,1],[3,0,4]]) #Data
     w = ad.autodiff('w', [3,-1,0]) #Weights
     # Set up parameters for gradient descent
-    f1 = ad.sinh(w*x)
+    f1 = admath.sinh(w*x)
     assert f1 == f1.forwardprop()
 
 
@@ -170,7 +170,7 @@ def test_cosh_dotproduct():
     x = np.array([[1,-2,1],[3,0,4]]) #Data
     w = ad.autodiff('w', [3,-1,0]) #Weights
     # Set up parameters for gradient descent
-    f1 = ad.cosh(w*x)
+    f1 = admath.cosh(w*x)
     assert f1 == f1.forwardprop()
 
 
@@ -185,7 +185,7 @@ def test_tanh_dotproduct():
     x = np.array([[1,-2,1],[3,0,4]]) #Data
     w = ad.autodiff('w', [3,-1,0]) #Weights
     # Set up parameters for gradient descent
-    f1 = ad.tanh(w*x)
+    f1 = admath.tanh(w*x)
     assert f1 == f1.forwardprop()
 
 
@@ -220,7 +220,7 @@ def test_logistic_dotproduct():
     x = np.array([[1,-2,1],[3,0,4]]) #Data
     w = ad.autodiff('w', [3,-1,0]) #Weights
     # Set up parameters for gradient descent
-    f1 = ad.logistic(w*x, A=2.0, k=1.5, x0=0.7)
+    f1 = admath.logistic(w*x, A=2.0, k=1.5, x0=0.7)
     assert f1 != f1.forwardprop()
 
 
@@ -245,7 +245,7 @@ def test_arcsin_dotproduct():
     x = np.array([[0.1,-0.2,0.1],[0.3,0,0.4]]) #Data
     w = ad.autodiff('w', [0.1,0.1,0.1]) #Weights
     # Set up parameters for gradient descent
-    f1 = ad.arcsin(w*x)
+    f1 = admath.arcsin(w*x)
     assert f1 == f1.forwardprop()
 
 
@@ -272,7 +272,7 @@ def test_arccos_dotproduct():
     x = np.array([[0.1,-0.2,0.1],[0.3,0,0.4]]) #Data
     w = ad.autodiff('w', [0.1,0.1,0.1]) #Weights
     # Set up parameters for gradient descent
-    f1 = ad.arccos(w*x)
+    f1 = admath.arccos(w*x)
     assert f1 == f1.forwardprop()
 
 def test_arctan_value():
@@ -291,5 +291,5 @@ def test_arctan_dotproduct():
     x = np.array([[1,-2,1],[3,0,4]]) #Data
     w = ad.autodiff('w', [3,-1,0]) #Weights
     # Set up parameters for gradient descent
-    f1 = ad.arctan(w*x)
+    f1 = admath.arctan(w*x)
     assert f1 == f1.forwardprop()

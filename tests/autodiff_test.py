@@ -376,7 +376,7 @@ def test_gradient_descent_MAE():
     # Set up parameters for gradient descent
     max_iter = 10000
     beta = 0.1
-    f = 1 + ad.exp(-1*w*x)
+    f = 1 + admath.exp(-1*w*x)
     y_act = [1.0, 1.05]
     tol = 1E-4
     loss = "MAE"
