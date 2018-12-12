@@ -266,6 +266,14 @@ def test_pow_result_adandconst():
     assert abs(ad5.der["x"] - 13.855502991133679740) < 1E-10
     assert abs(ad5.der["y"] - 9.2370019940891198269) < 1E-10
 
+def test_pow_dotproduct():
+    x = np.array([[1,2,1],[3,2,4]]) #Data
+    w = ad.autodiff('w', [3,1,0]) #Weights
+    # Set up parameters for gradient descent
+    f1 = w**x
+    assert f1 == f1.forwardprop()
+
+
 ## Test jacobian() output
 def test_jacobian():
     x = ad.autodiff('x', 10)

@@ -167,6 +167,7 @@ class autodiff():
 
         except AttributeError:
             anew.val = self.val/other
+
             for key in self.der:
                 anew.der[key] = (self.der[key])/other
 
@@ -180,7 +181,7 @@ class autodiff():
 
         if isinstance(other, (int, float, list, np.ndarray, autodiff)) == False:
             raise ValueError("Error: Only integer, float, list, numpy arrays, or autodiff instances can be divided.")
-        if isinstance(other,list):
+        if isinstance(other,(list,float,int)):
             other = np.asarray(other)
 
         anew = autodiff(self.name, self.val, self.der)
@@ -190,10 +191,12 @@ class autodiff():
 
         anew.function=self.__rtruediv__
         if isinstance(other, (int,float,list,np.ndarray)):
+
             for key in self.der:
                 anew.der[key] = -other*(self.der[key])/self.val**2
-                anew.val = other/self.val
-                self.back_partial_der = -1*(self.val**2)
+
+            anew.val = other/self.val
+            self.back_partial_der = -1*(self.val**2)
 
             return anew
 
@@ -353,8 +356,13 @@ class autodiff():
         except AttributeError:
             #Tries adding autodiff instance and number together
             for key in self.der:
-                anew.der[key] = other*(self.val**(other - 1))*self.der[key]
-                anew.val = self.val**other
+                if anew.der[key].shape == (other*(self.val**(other - 1))).shape:
+                    anew.der[key] = other*(self.val**(other - 1))*self.der[key]
+                else:
+                    anew.der[key] = np.dot(other*(self.val**(other - 1)),self.der[key])
+
+
+            anew.val = self.val**other
             self.back_partial_der = other*self.val**(other-1)
         #Returns new autodiff instance
         return anew
@@ -374,7 +382,8 @@ class autodiff():
         #Tries autodiff instance and number together
         for key in self.der:
             anew.der[key] = (other**self.val)*np.log(other)*self.der[key]
-            anew.val = other**self.val
+
+        anew.val = other**self.val
         self.back_partial_der = other**(self.val)*np.log(other)
         #Return new autodiff instance
         return anew

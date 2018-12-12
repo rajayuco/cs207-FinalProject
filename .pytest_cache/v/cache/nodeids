@@ -65,6 +65,7 @@
   "tests/autodiff_test.py::test_pow_err_types",
   "tests/autodiff_test.py::test_revpow_err_types",
   "tests/autodiff_test.py::test_pow_result_adandconst",
+  "tests/autodiff_test.py::test_pow_dotproduct",
   "tests/autodiff_test.py::test_jacobian",
   "tests/autodiff_test.py::test_forwardprop",
   "tests/autodiff_test.py::test_forwardprop2",
