@@ -557,8 +557,8 @@ def gradient_descent(f,y_true, loss = 'MSE', beta= 0.01, max_iter = 10000, tol=1
     >>> w = ad.autodiff('w', [1, 1, 1, 1, 1])
     >>> f1 = w*x_data
     >>> g = ad.gradient_descent(f1, y_true, loss='MSE', beta=0.001, max_iter=10000, tol=1E-3)
-    >>> print(np.abs(g['f'].val - y_true) <= 1E-3)
-    [True, True, True, True, True]
+    >>> print(g['loss_array'][-1] <= 1E-3)
+    True
     """
     #get w from f
     j = 0
