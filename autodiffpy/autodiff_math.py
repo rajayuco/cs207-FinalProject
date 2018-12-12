@@ -109,8 +109,9 @@ def cos(ad):
     EXAMPLES
     =========
     >>> from autodiffpy import autodiffmod as ad
+    >>> from autodiffpy import autodiff_math as admath
     >>> x = ad.autodiff('x', 10)
-    >>> f1 = ad.cos(x)
+    >>> f1 = admath.cos(x)
     >>> print(f1.val, f1.der)
     [-0.83907153] {'x': array([0.54402111])}
     """
